@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заявка принята — Чистый Дом</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    .check-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(34,211,238,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    @keyframes pop {
+      0%   { transform: scale(0.4); opacity: 0; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
+    .content-wrap {
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn-primary {
+      background: #22d3ee;
+      color: #0f172a;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-primary:hover {
+      background: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(34,211,238,0.3);
+    }
+    .btn-ghost {
+      border: 2px solid #e5e7eb;
+      color: #374151;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-ghost:hover {
+      border-color: #22d3ee;
+      color: #22d3ee;
+      transform: translateY(-2px);
+    }
+
+    /* Пульсирующая кнопка «На главную» */
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #22d3ee;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 13px 28px;
+      border-radius: 14px;
+      text-decoration: none;
+      animation: pulse-btn 2s ease-in-out infinite;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-back:hover {
+      animation: none;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(34,211,238,0.45);
+      background: #0891b2;
+    }
+    @keyframes pulse-btn {
+      0%   { box-shadow: 0 0 0 0 rgba(34,211,238,0.55); }
+      50%  { box-shadow: 0 0 0 12px rgba(34,211,238,0); }
+      100% { box-shadow: 0 0 0 0 rgba(34,211,238,0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col" style="background:linear-gradient(135deg,#f0fdff 0%,#f8fafc 60%,#f0f9ff 100%);">
+
+  <!-- Top accent line -->
+  <div class="h-1 w-full" style="background:linear-gradient(90deg,#22d3ee,#0891b2);"></div>
+
+  <!-- Main -->
+  <main class="flex-1 flex items-center justify-center px-4 py-16">
+    <div class="content-wrap w-full max-w-md text-center">
+
+      <!-- Check icon -->
+      <div class="check-circle">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+
+      <!-- Headline -->
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3">
+        Заявка принята!
+      </h1>
+      <p class="text-gray-500 text-base leading-relaxed mb-2">
+        Ожидайте звонка<br>
+        <span class="font-semibold text-gray-700">в течение 10 минут</span>
+      </p>
+
+      <!-- Пульсирующая кнопка назад -->
+      <div class="mt-6 mb-2">
+        <a href="index.html" class="btn-back">
+          ← Вернуться на главную
+        </a>
+      </div>
+
+      <!-- Divider -->
+      <div class="my-8 border-t border-gray-200"></div>
+
+      <!-- Что дальше -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-left mb-8">
+        <p class="text-xs font-bold text-gray-400 tracking-widest uppercase mb-4">Что будет дальше</p>
+        <div class="space-y-4">
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background:#22d3ee;">1</div>
+            <p class="text-gray-600 text-sm leading-relaxed pt-1">Специалист Владимир перезвонит<br>и уточнит ситуацию</p>
+          </div>
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background:#22d3ee;">2</div>
+            <p class="text-gray-600 text-sm leading-relaxed pt-1">Назовет цену</p>
+          </div>
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white" style="background:#22d3ee;">3</div>
+            <p class="text-gray-600 text-sm leading-relaxed pt-1">Договоритесь о времени выезда<br>Можно в тот же день</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA buttons -->
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href="tel:+79658225110" class="btn-primary text-base px-6 py-3.5 rounded-xl flex-1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.1 7.91a16 16 0 006 6l1.09-1.09a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          Позвонить сейчас
+        </a>
+        <a href="https://t.me/Evil_SVV" target="_blank" class="btn-ghost text-base px-6 py-3.5 rounded-xl flex-1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.944 0A12 12 0 1 0 24 12 12 12 0 0 0 11.944 0zm5.612 8.3-2.016 9.504c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.55 14.47l-2.95-.924c-.64-.203-.654-.64.136-.948l11.528-4.444c.535-.194 1.002.13.298.094z"/>
+          </svg>
+          Telegram
+        </a>
+      </div>
+
+
+    </div>
+  </main>
+
+
+  <script></script>
+</body>
+</html>

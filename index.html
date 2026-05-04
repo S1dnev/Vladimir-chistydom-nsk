@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="ru" id="html-root">
+<head>
+<script>document.getElementById('html-root').classList.add('js-on');</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Чистый Дом — Уничтожение насекомых в Новосибирске</title>
+  <meta name="description" content="Уничтожение тараканов, клопов, клещей в Новосибирске. Выезд в день звонка. Безопасно для детей и животных. Гарантия результата.">
+  <link rel="icon" type="image/png" href="Favikon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            accent: '#22d3ee',
+            'accent-dark': '#0891b2',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ═══ PRELOADER ═══ */
+    #preloader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #080f1e;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 28px;
+      transition: opacity 0.55s ease;
+      overflow: hidden;
+    }
+    /* Фоновые светящиеся круги */
+    #preloader::before, #preloader::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    #preloader::before {
+      width: 340px; height: 340px;
+      background: radial-gradient(circle, rgba(34,211,238,0.18) 0%, transparent 70%);
+      top: -80px; left: 50%; transform: translateX(-50%);
+      animation: pl-glow-pulse 1.8s ease-in-out infinite alternate;
+    }
+    #preloader::after {
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(8,145,178,0.12) 0%, transparent 70%);
+      bottom: -40px; right: 10%;
+      animation: pl-glow-pulse 2.2s 0.4s ease-in-out infinite alternate;
+    }
+    @keyframes pl-glow-pulse {
+      from { opacity: 0.6; transform: scale(0.9) translateX(-50%); }
+      to   { opacity: 1;   transform: scale(1.1) translateX(-50%); }
+    }
+    /* Логотип-иконка */
+    #pl-icon {
+      width: 72px; height: 72px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(34,211,238,0.18) 0%, rgba(8,145,178,0.1) 100%);
+      border: 1.5px solid rgba(34,211,238,0.3);
+      display: flex; align-items: center; justify-content: center;
+      animation: pl-icon-in 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+      box-shadow: 0 0 32px rgba(34,211,238,0.15);
+      position: relative; z-index: 1;
+    }
+    @keyframes pl-icon-in {
+      from { opacity: 0; transform: scale(0.5) rotate(-10deg); }
+      to   { opacity: 1; transform: scale(1) rotate(0deg); }
+    }
+    #pl-icon img { width: 46px; height: 46px; border-radius: 10px; object-fit: cover; }
+    /* Текст */
+    #pl-brand {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      position: relative; z-index: 1;
+      animation: pl-fade-up 0.5s 0.2s ease both;
+    }
+    @keyframes pl-fade-up {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    #pl-brand span:first-child {
+      color: #fff; font-size: 18px; font-weight: 700;
+      font-family: Inter, system-ui, sans-serif; letter-spacing: 0.02em;
+    }
+    #pl-brand span:last-child {
+      color: rgba(34,211,238,0.75); font-size: 11px; font-weight: 500;
+      font-family: Inter, system-ui, sans-serif; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    /* Прогресс-бар */
+    #pl-bar-wrap {
+      width: 160px; height: 3px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 99px;
+      overflow: hidden;
+      position: relative; z-index: 1;
+      animation: pl-fade-up 0.4s 0.35s ease both;
+    }
+    #pl-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #22d3ee, #0891b2);
+      border-radius: 99px;
+      animation: pl-progress 1.8s cubic-bezier(0.4,0,0.2,1) 0.2s forwards;
+    }
+    @keyframes pl-progress {
+      from { width: 0%; }
+      60%  { width: 75%; }
+      to   { width: 100%; }
+    }
+    @keyframes pl-autohide {
+      to { opacity: 0; pointer-events: none; visibility: hidden; }
+    }
+    #preloader.hide {
+      opacity: 0; pointer-events: none; animation: none;
+    }
+
+    /* Global */
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+
+    /* Hero */
+    #hero {
+      background-image: url('Hero.png');
+      background-size: cover;
+      background-position: 60% top;
+      background-attachment: fixed;
+    }
+    @media (max-width: 768px) {
+      #hero {
+        background-attachment: scroll;
+        background-position: 60% center;
+      }
+    }
+    @media (max-width: 425px) {
+      #hero {
+        background-attachment: scroll;
+        background-position: 60% center;
+      }
+    }
+
+    /* Кнопки — CTA pulse */
+    @keyframes cta-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(34,211,238,0.22); }
+      50%       { box-shadow: 0 0 0 9px rgba(34,211,238,0); }
+    }
+    .btn-primary {
+      background: #22d3ee;
+      color: #0f172a;
+      font-weight: 700;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      animation: cta-pulse 3.5s ease-in-out infinite;
+    }
+    .btn-primary:hover {
+      background: #0891b2;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(34,211,238,0.35);
+      animation: none;
+    }
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-weight: 600;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+    .btn-outline:hover {
+      border-color: #22d3ee;
+      color: #22d3ee;
+      transform: translateY(-2px);
+    }
+
+    /* ── Глобальная унификация шрифтов на мобайле ── */
+    @media (max-width: 639px) {
+      /* Подзаголовки секций */
+      p.mt-2.text-gray-500,
+      p.text-gray-500.mb-7 { font-size: 0.875rem; } /* 14px */
+      /* Заголовки карточек услуг */
+      h3.font-bold.text-gray-900 { font-size: 0.875rem; } /* 14px */
+      /* Эмодзи в карточках услуг */
+      .card-emoji.text-3xl { font-size: 1.5rem; margin-bottom: 0.5rem; }
+      /* Мобильный заголовок в секции безопасности */
+      .safety-header-row h2 { font-size: 1rem; line-height: 1.35; }
+      /* Заголовок формы */
+      h3.text-xl.font-bold.text-gray-900 { font-size: 1.125rem; }
+    }
+
+    /* Cards — базовый эффект */
+    .card {
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.10);
+    }
+    /* Карточки проблем и услуг: cyan-glow + акцентная верхняя линия */
+    .card-glow {
+      border-top: 3px solid transparent;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .card-glow:hover {
+      transform: translateY(-6px);
+      border-top-color: #22d3ee;
+      box-shadow: 0 20px 48px rgba(34,211,238,0.12), 0 4px 12px rgba(0,0,0,0.06);
+    }
+    /* Эмодзи в карточках — только на .card (не card-glow) */
+    .card:hover .card-emoji {
+      transform: scale(1.15);
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+    .card-emoji {
+      display: inline-block;
+      transition: transform 0.25s ease;
+    }
+
+    /* Секция «Почему Я» — фото-фон */
+    .why-section {
+      position: relative;
+      background: url('Фото лайк.png') center 20% / cover no-repeat;
+      min-height: clamp(420px, 55vh, 800px);
+    }
+    .why-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(7,14,30,0.86) 0%, rgba(5,20,38,0.82) 100%);
+    }
+    .why-section > .why-inner { position: relative; z-index: 1; }
+    /* Карточка преимущества */
+    .why-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px;
+      background: rgba(255,255,255,0.055);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.09);
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+    }
+    .why-item:hover {
+      background: rgba(34,211,238,0.13);
+      border-color: rgba(34,211,238,0.4);
+      transform: translateY(-2px);
+    }
+    .why-check {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: rgba(34,211,238,0.12);
+      border: 1px solid rgba(34,211,238,0.28);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.25s ease;
+    }
+    .why-item:hover .why-check {
+      background: rgba(34,211,238,0.28);
+    }
+
+    /* Шаги: hover = inset box-shadow (без сдвига layout) */
+    .step-item {
+      padding: 12px;
+      border-radius: 14px;
+      transition: background 0.25s ease, box-shadow 0.25s ease;
+    }
+    .step-item:hover {
+      background: rgba(34,211,238,0.05);
+      box-shadow: inset 3px 0 0 #22d3ee;
+    }
+    /* Шаг 4 «Результат»: на мобиле — видео слева + текст справа */
+    .step-result { padding: 0; background: none; }
+    @media (min-width: 640px) {
+      .step-result { padding: 12px; background: none; }
+    }
+    @media (max-width: 639px) {
+      .step-result {
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0;
+        min-height: 150px;
+        background: rgba(34,211,238,0.06);
+        border-radius: 16px;
+        border-left: 2px solid rgba(34,211,238,0.35);
+        overflow: hidden;
+        padding: 0;
+      }
+      .step-result:hover { background: rgba(34,211,238,0.10); }
+      /* Видео-колонка */
+      .step-result-vid {
+        flex: 0 0 104px;
+        width: 104px;
+        min-width: 104px;
+        align-self: stretch;
+        position: relative;
+        background: #000;
+        overflow: hidden;
+      }
+      .step-result-vid video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      /* Лейбл с логотипом — скрыт (слишком мало места) */
+      .step-result-vid .vid-lbl { display: none; }
+      /* Текстовая колонка */
+      .step-result-text {
+        flex: 1; min-width: 0;
+        padding: 12px 10px 12px 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+    /* Десктоп: видео-колонка скрыта */
+    @media (min-width: 640px) {
+      .step-result-vid { display: none; }
+      .step-result-text { display: contents; }
+    }
+
+    /* Безопасность: адаптивный layout */
+    .safety-outer {
+      display: flex;
+      flex-direction: row;
+      gap: clamp(1.2rem,4vw,3rem);
+      align-items: flex-start;
+    }
+    .safety-img-col {
+      flex: 0 0 40%;
+      max-width: 380px;
+      min-width: 0;
+    }
+    .safety-content { flex: 1; min-width: 0; }
+    /* Десктоп/планшет: мобильная строка скрыта, десктопные заголовки видны */
+    .safety-header-row { display: none; }
+    .safety-desktop-titles { display: block; }
+    @media (max-width: 639px) {
+      .safety-outer { flex-direction: column; gap: 0; }
+      .safety-img-col { display: none; }
+      /* Мобайл: показываем строку с картинкой + заголовком */
+      .safety-header-row {
+        display: flex;
+        flex-direction: row;
+        gap: 14px;
+        align-items: center;
+        margin-bottom: 1.25rem;
+      }
+      .safety-img-mobile {
+        flex: 0 0 90px;
+        width: 90px;
+        min-width: 90px;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      }
+      .safety-img-mobile img {
+        width: 100%; height: 100%; object-fit: cover; display: block;
+        aspect-ratio: 3/4;
+      }
+      .safety-desktop-titles { display: none; }
+      .safety-content { width: 100%; }
+    }
+
+    /* Gallery zoom + overlay caption */
+    .photo-wrap {
+      overflow: hidden;
+      position: relative;
+    }
+    .photo-wrap img {
+      transition: transform 0.5s ease;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+    }
+    .photo-wrap:hover img { transform: scale(1.12); }
+
+    /* Декоративные фоновые картинки в карточках проблем — ¼ ширины, без анимации */
+    .card-bg-img {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 25%;
+      object-fit: contain;
+      object-position: right center;
+      pointer-events: none;
+      user-select: none;
+    }
+    /* Текст в карточках проблем не наезжает на изображение справа */
+    .card-bg-img ~ p {
+      max-width: 72%;
+    }
+    /* На мобильном: картинка фиксированный размер, не вытесняет текст */
+    @media (max-width: 640px) {
+      .card-bg-img {
+        width: 42px;
+        height: 42px;
+        top: auto;
+        bottom: 6px;
+      }
+      .card-bg-img ~ p {
+        max-width: 100%;
+      }
+    }
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15,23,42,0.6) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+    }
+    .photo-wrap:hover .photo-overlay {
+      opacity: 1;
+    }
+    .photo-overlay span {
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    /* Контент всегда видимый — анимация только при появлении в viewport */
+    /* ── Scroll reveal ── */
+    /* Fallback: всегда видно без JS */
+    .reveal { opacity: 1; transform: none; }
+
+    /* С JS — скрываем до появления в зоне видимости */
+    html.js-on .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    html.js-on .reveal.is-visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Form inputs */
+    .inp {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fff;
+    }
+    .inp:focus { border-color: #22d3ee; }
+    .inp::placeholder { color: #9ca3af; }
+
+    /* Sticky floating buttons (mobile) */
+    .float-btns {
+      position: fixed;
+      bottom: 20px;
+      right: 16px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-end;
+    }
+    .float-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+    .float-btn:hover { transform: scale(1.1); }
+
+    /* Step number — просто цвет, без background-clip (иначе перекрывается inline background) */
+    .step-num-text {
+      color: #22d3ee;
+      font-size: 1.25rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    /* Section label */
+    .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #22d3ee;
+    }
+
+    /* Guarantee block */
+    .guarantee-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #0c2535 100%);
+    }
+
+    /* ── Анимация: картинки Photoroom ползут справа налево ── */
+    @keyframes img-crawl-in {
+      from { transform: translateX(90px); opacity: 0; }
+      to   { transform: translateX(0);    opacity: 1; }
+    }
+
+    /* ── Текстовый тикер ── */
+    .marquee-track {
+      height: 68px;
+      background: #f5f7f9;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .marquee-inner {
+      display: flex;
+      align-items: center;
+      white-space: nowrap;
+      animation: marquee-rtl 24s linear infinite;
+      will-change: transform;
+    }
+    .marquee-track:hover .marquee-inner {
+      animation-play-state: paused;
+    }
+    @keyframes marquee-rtl {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-33.333%); }
+    }
+    .marquee-item {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #374151;
+      white-space: nowrap;
+      padding: 0 20px;
+    }
+    .marquee-sep {
+      color: #22d3ee;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* ── Мобильный видео-виджет (секция 3, fixed bottom-left) ── */
+    #mobile-video-widget {
+      display: none;
+      position: fixed;
+      bottom: 88px;
+      left: 12px;
+      width: 88px;
+      z-index: 100;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.45);
+      aspect-ratio: 9 / 16;
+    }
+    #mobile-video-widget video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    #mobile-video-widget .vid-ov {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%);
+      pointer-events: none;
+    }
+    #mobile-video-widget .vid-lbl {
+      position: absolute;
+      bottom: 5px;
+      left: 5px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+    #mobile-video-widget .vid-lbl img {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 1.5px solid #22d3ee; flex-shrink: 0; object-fit: cover;
+    }
+    #mobile-video-widget .vid-lbl span {
+      color: #fff; font-size: 7px; font-weight: 700;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 antialiased">
+
+<!-- ─── PRELOADER ─── -->
+<div id="preloader">
+  <div id="pl-icon"><img src="logo.jpg" alt="Чистый Дом"></div>
+  <div id="pl-brand">
+    <span>Чистый Дом</span>
+    <span>Уничтожение насекомых · Новосибирск</span>
+  </div>
+  <div id="pl-bar-wrap"><div id="pl-bar"></div></div>
+</div>
+<!-- Инлайн-таймаут: запускается сразу, не ждёт CDN -->
+<script>
+  (function(){
+    function _hp(){
+      var e=document.getElementById('preloader');
+      if(!e||e._h)return; e._h=true;
+      e.style.transition='opacity 0.45s ease';
+      e.style.opacity='0';
+      e.style.pointerEvents='none';
+      setTimeout(function(){ if(e&&e.parentNode)e.parentNode.removeChild(e); },500);
+    }
+    window.addEventListener('load', function(){ setTimeout(_hp, 2000); });
+    setTimeout(_hp, 2400);
+  })();
+</script>
+
+<!-- ─── FLOATING BUTTONS ─── -->
+<div class="float-btns">
+  <a href="https://t.me/Evil_SVV" target="_blank" class="float-btn" style="background:#229ED9;" title="Telegram">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+      <path d="M11.944 0A12 12 0 1 0 24 12 12 12 0 0 0 11.944 0zm5.612 8.3-2.016 9.504c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.55 14.47l-2.95-.924c-.64-.203-.654-.64.136-.948l11.528-4.444c.535-.194 1.002.13.298.094z"/>
+    </svg>
+  </a>
+  <a href="tel:+79658225110" class="float-btn btn-primary" title="Позвонить">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.1 7.91a16 16 0 006 6l1.09-1.09a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+    </svg>
+  </a>
+</div>
+
+<!-- ─── HEADER ─── -->
+<header class="fixed top-0 left-0 right-0 z-50" style="background:rgba(15,23,42,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.07);">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+    <!-- Logo -->
+    <a href="#" class="flex items-center gap-3 flex-shrink-0">
+      <img src="logo.jpg" alt="Чистый Дом" class="w-9 h-9 object-cover" style="border-radius:7px; outline:2px solid #22d3ee; outline-offset:2px;">
+      <span class="font-semibold text-white text-sm sm:text-base tracking-tight">Чистый Дом</span>
+    </a>
+    <!-- Nav right -->
+    <div class="flex items-center gap-2 sm:gap-4">
+      <a href="https://t.me/Evil_SVV" target="_blank"
+         class="hidden sm:flex items-center gap-1.5 text-sm text-gray-400 hover:text-white transition-colors">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M11.944 0A12 12 0 1 0 24 12 12 12 0 0 0 11.944 0zm5.612 8.3-2.016 9.504c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.55 14.47l-2.95-.924c-.64-.203-.654-.64.136-.948l11.528-4.444c.535-.194 1.002.13.298.094z"/>
+        </svg>
+        Telegram
+      </a>
+      <a href="tel:+79658225110" class="btn-primary text-sm px-4 py-2 rounded-lg gap-2" style="white-space:nowrap;">
+        <svg class="hidden sm:block" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.1 7.91a16 16 0 006 6l1.09-1.09a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+        +7 965 822-51-10
+      </a>
+    </div>
+  </div>
+</header>
+
+
+<!-- ═══════════════════════════════════════
+     БЛОК 1 — HERO
+════════════════════════════════════════ -->
+<section id="hero" class="relative min-h-screen flex items-center">
+  <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(15,23,42,0.88) 0%,rgba(15,23,42,0.65) 100%);"></div>
+  <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full" style="padding-top:clamp(5.5rem,14vw,7rem); padding-bottom:clamp(6rem,18vw,8rem);">
+    <div class="max-w-xl">
+
+      <!-- Геолокация -->
+      <p class="label" style="margin-bottom:clamp(1rem,3vw,1.2rem);">Новосибирск и Новосибирская область</p>
+
+      <!-- H1 — 4 строки, каждая принудительно -->
+      <h1 class="font-extrabold text-white" style="font-size:clamp(1.9rem,7vw,3.5rem); line-height:1.12; letter-spacing:-0.01em; text-transform:uppercase; margin-bottom:clamp(3.8rem,6vw,2.4rem);">
+        <span style="display:block;">Тараканы,</span>
+        <span style="display:block;">Клопы, <span style="white-space:nowrap;">Клещи —</span></span>
+        <span style="display:block; color:#22d3ee;">Уничтожу</span>
+        <span style="display:block; color:#22d3ee;">С первого раза</span>
+      </h1>
+
+      <!-- Плотный чеклист — без лишних отступов -->
+      <div style="margin-bottom:clamp(6rem,22vw,3.8rem);">
+        <div style="display:flex; flex-direction:column; gap:7px;">
+          <div class="flex items-center text-gray-300" style="gap:10px; font-size:clamp(0.85rem,2.5vw,0.95rem);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+            Выезд в день звонка
+          </div>
+          <div class="flex items-center text-gray-300" style="gap:10px; font-size:clamp(0.85rem,2.5vw,0.95rem);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+            Безопасно для детей и животных
+          </div>
+          <div class="flex items-center text-gray-300" style="gap:10px; font-size:clamp(0.85rem,2.5vw,0.95rem);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+            Цена фиксируется до приезда
+          </div>
+          <div class="flex items-center text-gray-300" style="gap:10px; font-size:clamp(0.85rem,2.5vw,0.95rem);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
+            Если вернутся — приеду бесплатно
+          </div>
+        </div>
+      </div>
+
+      <!-- Кнопки -->
+      <div class="flex flex-col sm:flex-row items-center sm:items-start" style="gap:12px;">
+        <a href="#form" class="btn-primary rounded-xl gap-2 w-full sm:w-auto text-center" style="font-size:clamp(1rem,3vw,1.1rem); padding:14px 32px;">
+          Вызвать мастера
+        </a>
+        <a href="tel:+79658225110" class="btn-outline rounded-xl gap-2 bg-white/5 w-full sm:w-auto" style="font-size:clamp(1rem,3vw,1.1rem); padding:14px 28px; justify-content:center;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.1 7.91a16 16 0 006 6l1.09-1.09a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+          </svg>
+          Позвонить
+        </a>
+      </div>
+      <p class="text-gray-500 text-sm text-center sm:text-left" style="margin-top:12px;">Перезвоню в течение 10 минут</p>
+
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
+    <div class="animate-bounce opacity-40">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     БЛОК 2 — ПРОБЛЕМЫ
+════════════════════════════════════════ -->
+<section class="py-16 sm:py-24 bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+    <div class="reveal text-center mb-12">
+      <p class="label mb-3">Вы не одни</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Узнаёте себя?</h2>
+      <p class="mt-2 text-gray-500">Если хоть один пункт ваш — пора звонить</p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 reveal" style="grid-auto-rows:1fr;">
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
+        <img src="грустит-Photoroom.png" class="card-bg-img" alt="">
+        <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Травили сами — вернулись</p>
+        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Магазинные средства не работают. Насекомые к ним привыкли</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
+        <img src="сон-Photoroom.png" class="card-bg-img" alt="">
+        <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Не можете нормально спать</p>
+        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Клопы кусают каждую ночь. Это уже не терпеть — это срочно решать</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
+        <img src="деньги-Photoroom.png" class="card-bg-img" alt="">
+        <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Вызывали — не помогло</p>
+        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Деньги взяли, через месяц всё вернулось. Хочется гарантии</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
+        <img src="ребенок-Photoroom.png" class="card-bg-img" alt="">
+        <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Боитесь за детей и животных</p>
+        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Химия пугает. Непонятно, насколько это безопасно для ваших близких</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
+        <img src="думает-Photoroom.png" class="card-bg-img" alt="">
+        <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Не знаете, сколько стоит</p>
+        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Боитесь, что скажут одну цену, а возьмут другую</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
+        <img src="часы-Photoroom.png" class="card-bg-img" alt="">
+        <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Ждёте пока само пройдёт</p>
+        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Само не пройдёт. Чем дольше ждёте — тем их больше</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-10 reveal">
+      <a href="#form" class="btn-primary text-base px-8 py-4 rounded-xl gap-2">
+        Решить проблему сейчас
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<div class="marquee-track">
+  <div class="marquee-inner">
+    <span class="marquee-item">БЕЗ ЗАПАХА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗОПАСНО ДЛЯ ДЕТЕЙ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ГАРАНТИЯ РЕЗУЛЬТАТА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ВЫЕЗД В ДЕНЬ ОБРАЩЕНИЯ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">СЕРТИФИЦИРОВАННЫЕ ПРЕПАРАТЫ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">РАБОТАЮ ПО НОВОСИБИРСКУ И НСО</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗ ЗАПАХА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗОПАСНО ДЛЯ ДЕТЕЙ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ГАРАНТИЯ РЕЗУЛЬТАТА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ВЫЕЗД В ДЕНЬ ОБРАЩЕНИЯ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">СЕРТИФИЦИРОВАННЫЕ ПРЕПАРАТЫ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">РАБОТАЮ ПО НОВОСИБИРСКУ И НСО</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗ ЗАПАХА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗОПАСНО ДЛЯ ДЕТЕЙ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ГАРАНТИЯ РЕЗУЛЬТАТА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ВЫЕЗД В ДЕНЬ ОБРАЩЕНИЯ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">СЕРТИФИЦИРОВАННЫЕ ПРЕПАРАТЫ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">РАБОТАЮ ПО НОВОСИБИРСКУ И НСО</span><span class="marquee-sep">•</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     БЛОК 3 — КАК ПРОХОДИТ ОБРАБОТКА
+════════════════════════════════════════ -->
+<section id="section3" class="py-12 sm:py-24 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+    <div class="reveal text-center mb-8 sm:mb-14">
+      <p class="label mb-3">Просто и понятно</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Как всё происходит</h2>
+      <p class="mt-2 text-gray-500">Четыре шага — и проблемы нет</p>
+    </div>
+
+    <div style="display:flex; flex-direction:row; gap:clamp(1.5rem,4vw,3rem); align-items:center;">
+
+      <!-- Steps — каждый с индивидуальной анимацией -->
+      <div class="space-y-2 sm:space-y-4" style="flex:1; min-width:0;">
+
+        <div class="step-item flex gap-3 sm:gap-5 reveal" style="transition-delay:0s;">
+          <div class="flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center" style="background:rgba(34,211,238,0.1);">
+            <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">1</span>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Звонок или заявка</p>
+            <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">Расскажете ситуацию — скажу цену сразу. Никаких «приедем, посмотрим, тогда скажем»</p>
+          </div>
+        </div>
+
+        <div class="step-item flex gap-3 sm:gap-5 reveal" style="transition-delay:0.12s;">
+          <div class="flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center" style="background:rgba(34,211,238,0.1);">
+            <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">2</span>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Выезд</p>
+            <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">В удобное для вас время. Если срочно — в день обращения. Работаю по всему Новосибирску и НСО</p>
+          </div>
+        </div>
+
+        <div class="step-item flex gap-3 sm:gap-5 reveal" style="transition-delay:0.24s;">
+          <div class="flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center" style="background:rgba(34,211,238,0.1);">
+            <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">3</span>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Обработка</p>
+            <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">Профессиональные препараты — не те, что в магазине. Обработка занимает 1–2 часа. Без запаха и следов</p>
+          </div>
+        </div>
+
+        <div class="step-item step-result reveal" style="transition-delay:0.36s;">
+          <!-- Видео — только мобайл, слева -->
+          <div class="step-result-vid">
+            <video autoplay muted loop playsinline preload="none" style="width:100%;height:100%;object-fit:cover;display:block;">
+              <source src="clipfly-ai-20260502163149.mp4" type="video/mp4">
+            </video>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45) 0%,transparent 50%);pointer-events:none;"></div>
+            <div class="vid-lbl">
+              <img src="logo.jpg" alt="">
+              <span>@chistyidom_nsk</span>
+            </div>
+          </div>
+          <!-- Текст -->
+          <div class="step-result-text">
+            <div class="flex gap-3 sm:gap-5 items-start">
+              <div class="flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center" style="background:rgba(34,211,238,0.1);">
+                <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">4</span>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Результат</p>
+                <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">Насекомые погибают за 24–72 часа. Уже через несколько часов можно вернуться домой</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video — Shorts/Reels (только десктоп, на мобильном — fixed-виджет) -->
+      <div class="hidden sm:block reveal" style="flex-shrink:0;">
+        <div style="width:clamp(130px,34vw,260px); position:relative; border-radius:22px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.25); aspect-ratio:9/16; background:#000;">
+          <video id="main-video" autoplay muted loop playsinline preload="none" style="width:100%; height:100%; object-fit:cover; display:block;">
+            <source src="clipfly-ai-20260502163149.mp4" type="video/mp4">
+          </video>
+          <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 40%); pointer-events:none;"></div>
+          <div style="position:absolute; bottom:14px; left:14px; display:flex; align-items:center; gap:8px; pointer-events:none;">
+            <img src="logo.jpg" style="width:28px; height:28px; border-radius:50%; border:2px solid #22d3ee; object-fit:cover; flex-shrink:0;">
+            <span style="color:#fff; font-size:11px; font-weight:600; text-shadow:0 1px 3px rgba(0,0,0,0.6);">@chistyidom_nsk</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<div class="marquee-track">
+  <div class="marquee-inner">
+    <span class="marquee-item">БЕЗ ЗАПАХА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗОПАСНО ДЛЯ ДЕТЕЙ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ГАРАНТИЯ РЕЗУЛЬТАТА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ВЫЕЗД В ДЕНЬ ОБРАЩЕНИЯ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">СЕРТИФИЦИРОВАННЫЕ ПРЕПАРАТЫ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">РАБОТАЮ ПО НОВОСИБИРСКУ И НСО</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗ ЗАПАХА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗОПАСНО ДЛЯ ДЕТЕЙ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ГАРАНТИЯ РЕЗУЛЬТАТА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ВЫЕЗД В ДЕНЬ ОБРАЩЕНИЯ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">СЕРТИФИЦИРОВАННЫЕ ПРЕПАРАТЫ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">РАБОТАЮ ПО НОВОСИБИРСКУ И НСО</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗ ЗАПАХА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">БЕЗОПАСНО ДЛЯ ДЕТЕЙ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ГАРАНТИЯ РЕЗУЛЬТАТА</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">ВЫЕЗД В ДЕНЬ ОБРАЩЕНИЯ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">СЕРТИФИЦИРОВАННЫЕ ПРЕПАРАТЫ</span><span class="marquee-sep">•</span>
+    <span class="marquee-item">РАБОТАЮ ПО НОВОСИБИРСКУ И НСО</span><span class="marquee-sep">•</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     БЛОК 4 — УСЛУГИ
+════════════════════════════════════════ -->
+<section id="section-services" class="py-16 sm:py-24 bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+    <div class="reveal text-center mb-12">
+      <p class="label mb-3">Что обрабатываю</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Виды обработок</h2>
+      <p class="mt-2 text-gray-500">Работаю со всеми видами насекомых и сорняков</p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 reveal">
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
+        <div class="card-emoji text-3xl mb-4">🪳</div>
+        <h3 class="font-bold text-gray-900 mb-2">Тараканы</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Квартира, офис, кафе. Гелевый и аэрозольный метод. Уничтожение яиц и взрослых особей</p>
+        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 1 500 ₽</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
+        <div class="card-emoji text-3xl mb-4">🐛</div>
+        <h3 class="font-bold text-gray-900 mb-2">Клопы</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Полная обработка квартиры. Убиваю и яйца, и взрослых</p>
+        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 2 000 ₽</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
+        <div class="card-emoji text-3xl mb-4">🕷️</div>
+        <h3 class="font-bold text-gray-900 mb-2">Клещи</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Акарицидная обработка участка, дачи, территории. Защита на весь сезон</p>
+        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 1 500 ₽</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
+        <div class="card-emoji text-3xl mb-4">🐜</div>
+        <h3 class="font-bold text-gray-900 mb-2">Блохи и муравьи</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Полная обработка помещения. Особое внимание плинтусам, щелям и мягкой мебели</p>
+        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 1 500 ₽</p>
+      </div>
+
+      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
+        <div class="card-emoji text-3xl mb-4">🌿</div>
+        <h3 class="font-bold text-gray-900 mb-2">Участки и дачи</h3>
+        <p class="text-gray-500 text-sm leading-relaxed mb-4">Обработка от комаров, клещей и насекомых на открытом воздухе. Приеду за город</p>
+        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 2 000 ₽</p>
+      </div>
+
+      <!-- CTA card -->
+      <div class="card rounded-2xl p-3 sm:p-5 border border-gray-800 shadow-sm flex flex-col justify-between" style="background:linear-gradient(135deg,#0f172a,#0c2535);">
+        <div>
+          <div class="text-2xl sm:text-3xl mb-2 sm:mb-4">📞</div>
+          <h3 class="font-bold text-white text-sm sm:text-base mb-1 sm:mb-2">Не нашли свой случай?</h3>
+          <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-5">Расскажите ситуацию — скажу, что делать и сколько стоит</p>
+        </div>
+        <a href="tel:+79658225110" class="btn-primary text-sm px-4 py-3 rounded-xl">
+          Позвонить сейчас
+        </a>
+      </div>
+    </div>
+
+    <!-- Разновидности обработки -->
+    <div class="mt-10 reveal">
+      <div class="rounded-2xl overflow-hidden" style="background-image:linear-gradient(145deg,rgba(15,23,42,0.92) 0%,rgba(12,30,47,0.90) 100%),url('Hero.png'); background-size:cover; background-position:60% top; border:1px solid rgba(255,255,255,0.1);">
+
+        <div class="px-6 sm:px-8 pt-7 pb-5">
+          <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:#22d3ee;">Расширенный спектр</p>
+          <h3 class="text-xl sm:text-2xl font-bold text-white">Разновидности обработки</h3>
+          <p class="text-gray-500 text-sm mt-1">Профессиональные методы для каждой задачи</p>
+        </div>
+
+        <div class="px-4 sm:px-6 pb-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+
+          <!-- Инсектицидная — cyan -->
+          <div style="background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.16);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(34,211,238,0.13)'" onmouseout="this.style.background='rgba(34,211,238,0.08)'">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(34,211,238,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🧪</div>
+            <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Инсектицидная</h4>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Комплексная обработка от всех видов насекомых профессиональными препаратами</p>
+            <span style="color:#22d3ee;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 1 500 ₽</span>
+          </div>
+
+          <!-- Акарицидная — indigo -->
+          <div style="background:rgba(99,102,241,0.09);border:1px solid rgba(99,102,241,0.18);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='rgba(99,102,241,0.09)'">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(99,102,241,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🕷️</div>
+            <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Акарицидная</h4>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Уничтожение клещей и паукообразных на участке, в траве и кустарниках</p>
+            <span style="color:#818cf8;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 1 500 ₽</span>
+          </div>
+
+          <!-- Фумигация — amber -->
+          <div style="background:rgba(217,119,6,0.09);border:1px solid rgba(217,119,6,0.18);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(217,119,6,0.15)'" onmouseout="this.style.background='rgba(217,119,6,0.09)'">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(217,119,6,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🪵</div>
+            <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Фумигация от короеда</h4>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Обработка деревянных конструкций, бревен и балок. Уничтожение личинок жуков-короедов</p>
+            <span style="color:#fbbf24;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 3 000 ₽</span>
+          </div>
+
+          <!-- Гербицидная — emerald -->
+          <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.16);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(16,185,129,0.14)'" onmouseout="this.style.background='rgba(16,185,129,0.08)'">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(16,185,129,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🌱</div>
+            <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Гербицидная</h4>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Уничтожение сорняков. Дорожки, газоны, открытые территории и участки</p>
+            <span style="color:#34d399;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 2 000 ₽</span>
+          </div>
+
+          <!-- Антисептическая — violet -->
+          <div class="sm:col-span-2 lg:col-span-2" style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.17);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(139,92,246,0.14)'" onmouseout="this.style.background='rgba(139,92,246,0.08)'">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(139,92,246,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🛡️</div>
+            <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Антисептическая</h4>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Защита дерева от грибка, плесени и гнили в жилых и нежилых помещениях</p>
+            <span style="color:#a78bfa;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 2 000 ₽</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Выгода соседям -->
+    <div class="mt-8 reveal">
+      <div class="rounded-2xl p-6 sm:p-8" style="background:rgba(34,211,238,0.06); border:1.5px solid rgba(34,211,238,0.2);">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+          <div class="text-4xl flex-shrink-0">🏠</div>
+          <div class="flex-1">
+            <h3 class="font-bold text-gray-900 mb-2">Скидка соседям — за компанию выгоднее</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">Насекомые часто возвращаются из соседних квартир. Договоритесь вместе — каждая квартира получит скидку при одновременной обработке нескольких адресов. Размер скидки уточняйте при звонке</p>
+          </div>
+          <a href="tel:+79658225110" class="btn-primary text-sm px-6 py-3 rounded-xl flex-shrink-0 gap-2" style="white-space:nowrap;">
+            Узнать условия
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     БЛОК 5 — ГАЛЕРЕЯ РАБОТ
+════════════════════════════════════════ -->
+<section class="py-16 sm:py-24 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+    <div class="reveal text-center mb-12">
+      <p class="label mb-3">Реальные объекты</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Фото работ</h2>
+      <p class="mt-2 text-gray-500">Квартиры, кухни, подъезды, дачные участки</p>
+    </div>
+
+    <!-- Masonry-style grid -->
+    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 reveal" style="grid-auto-rows: 231px;">
+
+      <div class="photo-wrap rounded-2xl shadow-sm row-span-1">
+        <img src="фото обработки кухни.jpg" alt="Обработка кухни" loading="lazy">
+        <div class="photo-overlay"><span>Обработка кухни</span></div>
+      </div>
+
+      <div class="photo-wrap rounded-2xl shadow-sm row-span-1">
+        <img src="фото обработки в подъезде.jpg" alt="Обработка подъезда" loading="lazy">
+        <div class="photo-overlay"><span>Обработка подъезда</span></div>
+      </div>
+
+      <div class="photo-wrap rounded-2xl shadow-sm col-span-2 lg:col-span-1 lg:row-span-2">
+        <img src="фото обработки на участке дачи.png" alt="Обработка дачного участка" loading="lazy">
+        <div class="photo-overlay"><span>Обработка дачного участка</span></div>
+      </div>
+
+      <div class="photo-wrap rounded-2xl shadow-sm row-span-1">
+        <img src="фото обработки в квартире.jpeg" alt="Обработка квартиры" loading="lazy">
+        <div class="photo-overlay"><span>Обработка квартиры</span></div>
+      </div>
+
+      <div class="photo-wrap rounded-2xl shadow-sm row-span-1">
+        <img src="фото обработки в парке.jpeg" alt="Обработка территории" loading="lazy">
+        <div class="photo-overlay"><span>Обработка открытой территории</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     БЛОК 6 — ПРЕИМУЩЕСТВА
+════════════════════════════════════════ -->
+<section class="why-section py-16 sm:py-24">
+  <div class="why-inner max-w-5xl mx-auto px-4 sm:px-6">
+
+    <div class="reveal text-center mb-10">
+      <p class="label mb-3" style="color:rgba(34,211,238,0.9);">Почему я</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">А не другие:</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 reveal">
+
+      <div class="why-item">
+        <div class="why-check">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-semibold text-white text-sm sm:text-base">Один мастер</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-check">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-semibold text-white text-sm sm:text-base">Цена не меняется</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-check">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-semibold text-white text-sm sm:text-base">Гарантия результата</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-check">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-semibold text-white text-sm sm:text-base">Официальная лицензия</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-check">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-semibold text-white text-sm sm:text-base">Выезд в день звонка</p>
+      </div>
+
+      <div class="why-item">
+        <div class="why-check">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="font-semibold text-white text-sm sm:text-base">Профессиональные препараты</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     БЛОК 7 — БЕЗОПАСНОСТЬ
+════════════════════════════════════════ -->
+<section class="py-16 sm:py-24 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+    <div class="safety-outer">
+
+      <!-- Фото: десктоп — слева (40%), мобайл — скрыто, показывается внутри safety-header-row -->
+      <div class="reveal safety-img-col">
+        <div class="photo-wrap rounded-2xl shadow-xl" style="aspect-ratio:4/3; width:100%;">
+          <img src="building-Photoroom.png" alt="Профессиональная дезинсекция" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+      </div>
+
+      <!-- Контент -->
+      <div class="reveal safety-content">
+
+        <!-- Мобайл: картинка слева + label + h2 справа -->
+        <div class="safety-header-row">
+          <div class="safety-img-mobile">
+            <img src="building-Photoroom.png" alt="Профессиональная дезинсекция" loading="lazy">
+          </div>
+          <div>
+            <p class="label mb-2">Безопасность</p>
+            <h2 class="text-xl font-bold text-gray-900 leading-snug">Беспокоитесь за детей и животных?</h2>
+          </div>
+        </div>
+
+        <!-- Десктоп: label + h2 (скрыто на мобайле через CSS) -->
+        <div class="safety-desktop-titles">
+          <p class="label mb-3">Безопасность</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Беспокоитесь за детей и животных?</h2>
+        </div>
+
+        <p class="text-gray-500 mb-7">Не переживайте, потому что:</p>
+
+        <div class="space-y-4">
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-gray-700 text-sm leading-relaxed">Все препараты сертифицированы и разрешены в жилых помещениях</p>
+          </div>
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-gray-700 text-sm leading-relaxed">После высыхания — полностью безопасно. Это 2–4 часа</p>
+          </div>
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-gray-700 text-sm leading-relaxed">Дети и животные могут вернуться домой уже через несколько часов</p>
+          </div>
+          <div class="flex gap-3">
+            <div class="flex-shrink-0 mt-0.5">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="text-gray-700 text-sm leading-relaxed">Если в семье есть аллергик — скажите при звонке. Подберу препарат</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Кнопка: центрирована по всей секции -->
+    <div class="text-center mt-10">
+      <a href="tel:+79658225110" class="btn-primary text-sm px-6 py-3 rounded-xl gap-2 inline-flex items-center">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.1 7.91a16 16 0 006 6l1.09-1.09a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+        </svg>
+        Задать вопрос по телефону
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     БЛОК 8 — ФИНАЛЬНЫЙ ДОЖИМ + ФОРМА
+════════════════════════════════════════ -->
+<section id="form" class="py-16 sm:py-24 guarantee-bg">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+      <!-- Left: urgency -->
+      <div class="reveal">
+        <p class="label mb-3">Не ждите</p>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Насекомые не уйдут сами</h2>
+        <p class="text-gray-400 leading-relaxed mb-8">Чем дольше ждёте — тем их больше. Клопы удваиваются каждые две недели. Один звонок — и уже завтра спите спокойно.</p>
+
+        <div class="space-y-4 mb-10">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(34,211,238,0.12);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="text-gray-300">Выезд в день обращения</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(34,211,238,0.12);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="text-gray-300">Гарантия на результат</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style="background:rgba(34,211,238,0.12);">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="text-gray-300">Фиксированная цена — без сюрпризов</span>
+          </div>
+        </div>
+
+        <div class="pt-8 border-t border-white/10">
+          <p class="text-gray-500 text-sm mb-4">Или пишите напрямую</p>
+          <a href="https://t.me/Evil_SVV" target="_blank"
+             class="inline-flex items-center gap-2.5 text-gray-300 hover:text-white transition-colors font-medium">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#229ED9">
+              <path d="M11.944 0A12 12 0 1 0 24 12 12 12 0 0 0 11.944 0zm5.612 8.3-2.016 9.504c-.148.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L6.55 14.47l-2.95-.924c-.64-.203-.654-.64.136-.948l11.528-4.444c.535-.194 1.002.13.298.094z"/>
+            </svg>
+            Написать в Telegram
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="reveal">
+        <div class="bg-white rounded-2xl p-8 shadow-2xl">
+          <h3 class="text-xl font-bold text-gray-900 mb-1">Оставьте заявку</h3>
+          <p class="text-gray-500 text-sm mb-6">Перезвоню в течение 10 минут</p>
+
+          <form id="leadForm" action="thanks.html" method="GET" novalidate>
+            <div class="space-y-4">
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5" for="f-name">Ваше имя</label>
+                <input id="f-name" type="text" name="name" class="inp" placeholder="Как вас зовут?" required autocomplete="given-name">
+                <p class="text-red-500 text-xs mt-1 hidden" id="err-name">Введите имя</p>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1.5" for="f-phone">Телефон</label>
+                <input id="f-phone" type="tel" name="phone" class="inp" placeholder="+7 (___) ___-__-__" required autocomplete="tel">
+                <p class="text-red-500 text-xs mt-1 hidden" id="err-phone">Введите телефон</p>
+              </div>
+
+              <!-- Чекбокс согласия (обязательный по закону) -->
+              <div class="flex items-start gap-3 mt-1">
+                <div class="flex-shrink-0 mt-0.5">
+                  <input type="checkbox" id="consent" name="consent" required
+                    style="width:18px;height:18px;accent-color:#22d3ee;cursor:pointer;border-radius:4px;"
+                    onchange="
+                      var btn=document.getElementById('submitBtn');
+                      btn.disabled=!this.checked;
+                      btn.style.opacity=this.checked?'1':'0.45';
+                      btn.style.cursor=this.checked?'pointer':'not-allowed';
+                    ">
+                </div>
+                <label for="consent" class="text-gray-500 text-xs leading-relaxed cursor-pointer">
+                  Нажимая кнопку «Отправить», я подтверждаю своё согласие на обработку персональных данных в соответствии с
+                  <a href="privacy.html" style="color:#22d3ee;text-decoration:underline;text-underline-offset:2px;">Политикой конфиденциальности</a>
+                </label>
+              </div>
+
+              <button type="submit" id="submitBtn" disabled
+                class="btn-primary w-full text-lg py-4 rounded-xl gap-2 mt-2"
+                style="opacity:0.45;cursor:not-allowed;">
+                Отправить
+              </button>
+
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── FOOTER ─── -->
+<footer class="bg-gray-900 py-10 border-t border-white/5">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+
+    <!-- Логотип + контакты -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <img src="logo.jpg" alt="Чистый Дом" class="w-10 h-10 object-cover" style="border-radius:7px;">
+        <div>
+          <p class="font-semibold text-white text-sm">"Чистый Дом"</p>
+          <p class="text-gray-600 text-xs">Уничтожение насекомых, Новосибирск</p>
+        </div>
+      </div>
+      <div class="flex flex-col items-center sm:items-end gap-2">
+        <a href="tel:+79658225110" class="text-white font-semibold text-sm hover:text-accent transition-colors" style="--tw-text-opacity:1">+7 965 822-51-10</a>
+        <a href="https://t.me/Evil_SVV" target="_blank" class="text-gray-500 hover:text-white text-xs transition-colors">Telegram: @Evil_SVV</a>
+      </div>
+    </div>
+
+    <!-- Нижняя строка: копирайт + политика + регион -->
+    <div class="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <p class="text-gray-700 text-xs">© 2025 ИП Чернов. Лицензия №Л064-00111-26/01707586</p>
+      <a href="privacy.html" class="text-gray-600 hover:text-gray-400 text-xs transition-colors">Политика конфиденциальности</a>
+      <p class="text-gray-700 text-xs">Новосибирск и Новосибирская область</p>
+    </div>
+
+    <!-- Логотип разработчика -->
+    <div class="mt-6 pt-5 border-t border-white/5 flex justify-center">
+      <a href="#" target="_blank" rel="noopener" title="Разработчик сайта" style="opacity:0.5; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='0.5'">
+        <img src="My logo.png" alt="Разработчик сайта" style="height:46px; width:auto; display:block;">
+      </a>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ── Mobile video widget — MUST be before <script> so getElementById finds it ── -->
+<div id="mobile-video-widget" style="display:none !important;">
+  <video id="mob-vid" autoplay muted loop playsinline preload="none"
+         style="width:100%;height:100%;object-fit:cover;display:block;">
+    <source src="clipfly-ai-20260502163149.mp4" type="video/mp4">
+  </video>
+  <div class="vid-ov"></div>
+  <div class="vid-lbl">
+    <img src="logo.jpg" alt="Чистый Дом">
+    <span>@chistyidom_nsk</span>
+  </div>
+  <!-- tap-to-play overlay if autoplay blocked -->
+  <div id="mob-vid-play" onclick="document.getElementById('mob-vid').play();this.style.display='none';"
+       style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);cursor:pointer;">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+  </div>
+</div>
+
+<!-- ─── SCRIPTS ─── -->
+<script>
+  // ── Preloader — минимум 2 секунды ──
+  var _plStart = Date.now();
+  function hidePreloader() {
+    var el = document.getElementById('preloader');
+    if (!el || el._hidden) return;
+    var elapsed = Date.now() - _plStart;
+    var delay = Math.max(0, 2000 - elapsed);
+    setTimeout(function() {
+      if (!el || el._hidden) return;
+      el._hidden = true;
+      el.classList.add('hide');
+      setTimeout(function() { if (el && el.parentNode) el.parentNode.removeChild(el); }, 600);
+    }, delay);
+  }
+  window.addEventListener('load', function() { hidePreloader(); });
+  // Аварийный таймаут — не позже 3 сек с момента загрузки скрипта
+  setTimeout(hidePreloader, 3000);
+
+  // ── Scroll reveal ──
+  (function() {
+    if (!('IntersectionObserver' in window)) {
+      // Старые браузеры: просто показать всё
+      document.querySelectorAll('.reveal').forEach(function(el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(function(el, i) {
+      // Уже видимые элементы (hero, первый экран) — показать сразу
+      var rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 40) {
+        el.classList.add('is-visible');
+      } else {
+        io.observe(el);
+      }
+    });
+  })();
+
+  // ── Phone mask ──
+  const phoneInput = document.getElementById('f-phone');
+  phoneInput.addEventListener('input', function () {
+    let v = this.value.replace(/\D/g, '');
+    if (v.startsWith('8')) v = '7' + v.slice(1);
+    if (!v.startsWith('7') && v.length > 0) v = '7' + v;
+    v = v.slice(0, 11);
+    let m = '+7';
+    if (v.length > 1) m += ' (' + v.slice(1, 4);
+    if (v.length > 4) m += ') ' + v.slice(4, 7);
+    if (v.length > 7) m += '-' + v.slice(7, 9);
+    if (v.length > 9) m += '-' + v.slice(9, 11);
+    this.value = m;
+  });
+
+  // ── Form validation & submit ──
+  const form = document.getElementById('leadForm');
+  const submitBtn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    let valid = true;
+
+    const name = document.getElementById('f-name');
+    const errName = document.getElementById('err-name');
+    if (name.value.trim().length < 2) {
+      errName.classList.remove('hidden');
+      name.style.borderColor = '#ef4444';
+      valid = false;
+    } else {
+      errName.classList.add('hidden');
+      name.style.borderColor = '#22d3ee';
+    }
+
+    const phone = document.getElementById('f-phone');
+    const errPhone = document.getElementById('err-phone');
+    const digits = phone.value.replace(/\D/g, '');
+    if (digits.length < 11) {
+      errPhone.classList.remove('hidden');
+      phone.style.borderColor = '#ef4444';
+      valid = false;
+    } else {
+      errPhone.classList.add('hidden');
+      phone.style.borderColor = '#22d3ee';
+    }
+
+    if (valid) {
+      submitBtn.textContent = 'Отправляем...';
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
+      // Отправляем заявку на почту и редиректим на thanks.html
+      var nameVal  = document.getElementById('f-name').value.trim();
+      var phoneVal = document.getElementById('f-phone').value.trim();
+      var emailBody = encodeURIComponent(
+        'Новая заявка с сайта «Чистый Дом»\n\n' +
+        'Имя: ' + nameVal + '\n' +
+        'Телефон: ' + phoneVal + '\n\n' +
+        'Источник: chistydom-nsk.ru'
+      );
+      var mailto = 'mailto:ais3000@yandex.ru' +
+        '?subject=' + encodeURIComponent('Новая заявка — Чистый Дом') +
+        '&body=' + emailBody;
+      window.open(mailto, '_blank');
+      setTimeout(function() {
+        window.location.href = 'thanks.html';
+      }, 800);
+    }
+  });
+
+  // ── Header scroll style ──
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      header.style.borderBottomColor = 'rgba(255,255,255,0.12)';
+    } else {
+      header.style.borderBottomColor = 'rgba(255,255,255,0.07)';
+    }
+  }, { passive: true });
+
+  // ── Mobile video widget — stays strictly inside section3's visible area ──
+  (function () {
+    var sec    = document.getElementById('section3');
+    var widget = document.getElementById('mobile-video-widget');
+    var mobV   = document.getElementById('mob-vid');
+    var playOv = document.getElementById('mob-vid-play');
+    if (!sec || !widget) return;
+
+
+    // widget is display:none !important — no-op
+  })();
+</script>
+
+</body>
+</html>
