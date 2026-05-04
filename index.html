@@ -1383,7 +1383,7 @@
 
     <!-- Нижняя строка: копирайт + политика + регион -->
     <div class="mt-8 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-2">
-      <p class="text-gray-700 text-xs">© 2025 ИП Чернов. Лицензия №Л064-00111-26/01707586</p>
+      <p class="text-gray-700 text-xs">© 2025 ИП Чернов Д.П. Лицензия №Л064-00111-26/01707586</p>
       <a href="privacy.html" class="text-gray-600 hover:text-gray-400 text-xs transition-colors">Политика конфиденциальности</a>
       <p class="text-gray-700 text-xs">Новосибирск и Новосибирская область</p>
     </div>
@@ -1515,22 +1515,46 @@
       submitBtn.textContent = 'Отправляем...';
       submitBtn.disabled = true;
       submitBtn.style.opacity = '0.7';
-      // Отправляем заявку на почту и редиректим на thanks.html
+
       var nameVal  = document.getElementById('f-name').value.trim();
       var phoneVal = document.getElementById('f-phone').value.trim();
-      var emailBody = encodeURIComponent(
-        'Новая заявка с сайта «Чистый Дом»\n\n' +
-        'Имя: ' + nameVal + '\n' +
-        'Телефон: ' + phoneVal + '\n\n' +
-        'Источник: chistydom-nsk.ru'
+
+      // ── НАСТРОЙКИ — вставьте свои значения ──────────────────────────
+      var TG_TOKEN   = '8686915338:AAE1dJ-UdgfM8IvyCby13n-fgZIeqlisiss';
+      var TG_CHAT_ID = '532088676';
+      var W3F_KEY    = 'e513e7f0-6846-4599-a31f-7766b5be9773';
+      // ────────────────────────────────────────────────────────────────
+
+      var tgText = encodeURIComponent(
+        '🔔 Новая заявка — Чистый Дом\n\n' +
+        '👤 Имя: ' + nameVal + '\n' +
+        '📞 Телефон: ' + phoneVal
       );
-      var mailto = 'mailto:ais3000@yandex.ru' +
-        '?subject=' + encodeURIComponent('Новая заявка — Чистый Дом') +
-        '&body=' + emailBody;
-      window.open(mailto, '_blank');
+
+      // 1. Отправка в Telegram
+      var tgUrl = 'https://api.telegram.org/bot' + TG_TOKEN +
+        '/sendMessage?chat_id=' + TG_CHAT_ID +
+        '&text=' + tgText + '&parse_mode=HTML';
+
+      fetch(tgUrl).catch(function() {});
+
+      // 2. Отправка на email через Web3Forms
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          access_key: W3F_KEY,
+          subject: 'Новая заявка — Чистый Дом',
+          name: nameVal,
+          phone: phoneVal,
+          message: 'Имя: ' + nameVal + '\nТелефон: ' + phoneVal
+        })
+      }).catch(function() {});
+
+      // 3. Редирект на страницу благодарности
       setTimeout(function() {
         window.location.href = 'thanks.html';
-      }, 800);
+      }, 900);
     }
   });
 
