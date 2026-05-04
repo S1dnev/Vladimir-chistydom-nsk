@@ -227,47 +227,7 @@
       transition: transform 0.25s ease;
     }
 
-    /* Секция «Почему Я» — фото-фон */
-    .why-section {
-      position: relative;
-      background: url('Фото лайк.png') center 20% / cover no-repeat;
-      min-height: clamp(420px, 55vh, 800px);
-    }
-    .why-section::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, rgba(7,14,30,0.86) 0%, rgba(5,20,38,0.82) 100%);
-    }
-    .why-section > .why-inner { position: relative; z-index: 1; }
-    /* Карточка преимущества */
-    .why-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 18px 20px;
-      background: rgba(255,255,255,0.055);
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.09);
-      transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-    }
-    .why-item:hover {
-      background: rgba(34,211,238,0.13);
-      border-color: rgba(34,211,238,0.4);
-      transform: translateY(-2px);
-    }
-    .why-check {
-      flex-shrink: 0;
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: rgba(34,211,238,0.12);
-      border: 1px solid rgba(34,211,238,0.28);
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.25s ease;
-    }
-    .why-item:hover .why-check {
-      background: rgba(34,211,238,0.28);
-    }
+
 
     /* Шаги: hover = inset box-shadow (без сдвига layout) */
     .step-item {
@@ -333,48 +293,7 @@
       .step-result-text { display: contents; }
     }
 
-    /* Безопасность: адаптивный layout */
-    .safety-outer {
-      display: flex;
-      flex-direction: row;
-      gap: clamp(1.2rem,4vw,3rem);
-      align-items: flex-start;
-    }
-    .safety-img-col {
-      flex: 0 0 40%;
-      max-width: 380px;
-      min-width: 0;
-    }
-    .safety-content { flex: 1; min-width: 0; }
-    /* Десктоп/планшет: мобильная строка скрыта, десктопные заголовки видны */
-    .safety-header-row { display: none; }
-    .safety-desktop-titles { display: block; }
-    @media (max-width: 639px) {
-      .safety-outer { flex-direction: column; gap: 0; }
-      .safety-img-col { display: none; }
-      /* Мобайл: показываем строку с картинкой + заголовком */
-      .safety-header-row {
-        display: flex;
-        flex-direction: row;
-        gap: 14px;
-        align-items: center;
-        margin-bottom: 1.25rem;
-      }
-      .safety-img-mobile {
-        flex: 0 0 90px;
-        width: 90px;
-        min-width: 90px;
-        border-radius: 14px;
-        overflow: hidden;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      }
-      .safety-img-mobile img {
-        width: 100%; height: 100%; object-fit: cover; display: block;
-        aspect-ratio: 3/4;
-      }
-      .safety-desktop-titles { display: none; }
-      .safety-content { width: 100%; }
-    }
+
 
     /* Gallery zoom + overlay caption */
     .photo-wrap {
@@ -386,7 +305,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
     .photo-wrap:hover img { transform: scale(1.12); }
 
@@ -502,7 +421,7 @@
 
     /* Section label */
     .label {
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -600,6 +519,91 @@
       color: #fff; font-size: 7px; font-weight: 700;
       text-shadow: 0 1px 2px rgba(0,0,0,0.8);
     }
+
+    /* ── Parallax sections (section3 + gallery) ── */
+    /* ── Parallax: фон — отдельный div, двигается через transform ── */
+    .parallax-hero {
+      position: relative;
+      overflow: hidden;   /* обрезаем вылезающий parallax-bg */
+    }
+    /* Фоновый слой — уходит за пределы секции (extra 30%) */
+    .parallax-bg {
+      position: absolute;
+      top: -30%;
+      bottom: -30%;
+      left: 0;
+      right: 0;
+      background-image: url('Hero.png');
+      background-size: cover;
+      background-position: 60% center;
+      z-index: 0;
+      will-change: transform;
+    }
+    /* Тёмный оверлей поверх фона */
+    .parallax-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(150deg, rgba(7,14,30,0.91) 0%, rgba(4,18,36,0.87) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .parallax-inner { position: relative; z-index: 2; }
+
+    /* step-item на тёмном фоне */
+    .parallax-hero .step-item:hover {
+      background: rgba(34,211,238,0.08);
+      box-shadow: inset 3px 0 0 #22d3ee;
+    }
+
+    /* ── Карточки «Почему выбирают меня» ── */
+    .why-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 22px;
+      padding: clamp(20px,3vw,32px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+    .why-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #22d3ee, #0891b2);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+    .why-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(34,211,238,0.12), 0 4px 16px rgba(0,0,0,0.06);
+      border-color: rgba(34,211,238,0.3);
+    }
+    .why-card:hover::after { transform: scaleX(1); }
+    .why-card-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: rgba(34,211,238,0.1);
+      border: 1px solid rgba(34,211,238,0.2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.3s ease;
+    }
+    .why-card:hover .why-card-icon {
+      background: rgba(34,211,238,0.18);
+    }
+    @keyframes card-pop {
+      from { opacity: 0; transform: translateY(24px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .why-card.is-visible {
+      animation: card-pop 0.5s cubic-bezier(0.34,1.1,0.64,1) both;
+    }
   </style>
 </head>
 <body class="bg-white text-gray-900 antialiased">
@@ -695,7 +699,7 @@
         <div style="display:flex; flex-direction:column; gap:7px;">
           <div class="flex items-center text-gray-300" style="gap:10px; font-size:clamp(0.85rem,2.5vw,0.95rem);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
-            Выезд в день звонка
+            Выезд лично
           </div>
           <div class="flex items-center text-gray-300" style="gap:10px; font-size:clamp(0.85rem,2.5vw,0.95rem);">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
@@ -705,15 +709,12 @@
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
             Цена фиксируется до приезда
           </div>
-          <div class="flex items-center text-gray-300" style="gap:10px; font-size:clamp(0.85rem,2.5vw,0.95rem);">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="20 6 9 17 4 12"/></svg>
-            Если вернутся — приеду бесплатно
-          </div>
+
         </div>
       </div>
 
       <!-- Кнопки -->
-      <div class="flex flex-col sm:flex-row items-center sm:items-start" style="gap:12px;">
+      <div class="flex flex-col sm:flex-row items-center sm:items-start" style="gap:14px;">
         <a href="#form" class="btn-primary rounded-xl gap-2 w-full sm:w-auto text-center" style="font-size:clamp(1rem,3vw,1.1rem); padding:14px 32px;">
           Вызвать мастера
         </a>
@@ -724,7 +725,6 @@
           Позвонить
         </a>
       </div>
-      <p class="text-gray-500 text-sm text-center sm:text-left" style="margin-top:12px;">Перезвоню в течение 10 минут</p>
 
     </div>
   </div>
@@ -757,37 +757,37 @@
       <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
         <img src="грустит-Photoroom.png" class="card-bg-img" alt="">
         <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Травили сами — вернулись</p>
-        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Магазинные средства не работают. Насекомые к ним привыкли</p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Магазинные средства не работают. Насекомые к ним привыкли</p>
       </div>
 
       <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
         <img src="сон-Photoroom.png" class="card-bg-img" alt="">
         <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Не можете нормально спать</p>
-        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Клопы кусают каждую ночь. Это уже не терпеть — это срочно решать</p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Клопы кусают каждую ночь. Это уже не терпеть — это срочно решать</p>
       </div>
 
       <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
         <img src="деньги-Photoroom.png" class="card-bg-img" alt="">
         <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Вызывали — не помогло</p>
-        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Деньги взяли, через месяц всё вернулось. Хочется гарантии</p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Деньги взяли, через месяц всё вернулось. Хочется гарантии</p>
       </div>
 
       <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
         <img src="ребенок-Photoroom.png" class="card-bg-img" alt="">
         <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Боитесь за детей и животных</p>
-        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Химия пугает. Непонятно, насколько это безопасно для ваших близких</p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Химия пугает. Непонятно, насколько это безопасно для ваших близких</p>
       </div>
 
       <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
         <img src="думает-Photoroom.png" class="card-bg-img" alt="">
         <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Не знаете, сколько стоит</p>
-        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Боитесь, что скажут одну цену, а возьмут другую</p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Боитесь, что скажут одну цену, а возьмут другую</p>
       </div>
 
       <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm" style="position:relative;overflow:hidden;">
         <img src="часы-Photoroom.png" class="card-bg-img" alt="">
         <p class="font-semibold text-gray-900 text-xs sm:text-sm mb-1" style="position:relative;z-index:1;">Ждёте пока само пройдёт</p>
-        <p class="text-gray-500 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Само не пройдёт. Чем дольше ждёте — тем их больше</p>
+        <p class="text-gray-400 text-xs sm:text-sm leading-relaxed" style="position:relative;z-index:1;">Само не пройдёт. Чем дольше ждёте — тем их больше</p>
       </div>
     </div>
 
@@ -796,6 +796,7 @@
         Решить проблему сейчас
       </a>
     </div>
+  </div>
   </div>
 </section>
 
@@ -826,13 +827,15 @@
 <!-- ═══════════════════════════════════════
      БЛОК 3 — КАК ПРОХОДИТ ОБРАБОТКА
 ════════════════════════════════════════ -->
-<section id="section3" class="py-12 sm:py-24 bg-white">
+<section id="section3" class="py-12 sm:py-24 parallax-hero">
+  <div class="parallax-bg"></div>
+  <div class="parallax-inner">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
     <div class="reveal text-center mb-8 sm:mb-14">
       <p class="label mb-3">Просто и понятно</p>
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Как всё происходит</h2>
-      <p class="mt-2 text-gray-500">Четыре шага — и проблемы нет</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">Как всё происходит</h2>
+      <p class="mt-2 text-gray-400">Четыре шага — и проблемы нет</p>
     </div>
 
     <div style="display:flex; flex-direction:row; gap:clamp(1.5rem,4vw,3rem); align-items:center;">
@@ -845,8 +848,8 @@
             <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">1</span>
           </div>
           <div>
-            <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Звонок или заявка</p>
-            <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">Расскажете ситуацию — скажу цену сразу. Никаких «приедем, посмотрим, тогда скажем»</p>
+            <p class="font-semibold text-white text-sm sm:text-base mb-0.5 sm:mb-1">Звонок или заявка</p>
+            <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">Расскажете ситуацию — скажу цену сразу. Никаких «приедем, посмотрим, тогда скажем»</p>
           </div>
         </div>
 
@@ -855,8 +858,8 @@
             <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">2</span>
           </div>
           <div>
-            <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Выезд</p>
-            <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">В удобное для вас время. Если срочно — в день обращения. Работаю по всему Новосибирску и НСО</p>
+            <p class="font-semibold text-white text-sm sm:text-base mb-0.5 sm:mb-1">Выезд</p>
+            <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">В удобное для вас время. Если срочно — в день обращения. Работаю по всему Новосибирску и НСО</p>
           </div>
         </div>
 
@@ -865,8 +868,8 @@
             <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">3</span>
           </div>
           <div>
-            <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Обработка</p>
-            <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">Профессиональные препараты — не те, что в магазине. Обработка занимает 1–2 часа. Без запаха и следов</p>
+            <p class="font-semibold text-white text-sm sm:text-base mb-0.5 sm:mb-1">Обработка</p>
+            <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">Профессиональные препараты — не те, что в магазине. Обработка занимает 1–2 часа. Без запаха и следов</p>
           </div>
         </div>
 
@@ -889,8 +892,8 @@
                 <span class="step-num-text" style="font-size:clamp(0.8rem,2.5vw,1.25rem);">4</span>
               </div>
               <div>
-                <p class="font-semibold text-gray-900 text-sm sm:text-base mb-0.5 sm:mb-1">Результат</p>
-                <p class="text-gray-500 text-xs sm:text-sm leading-relaxed">Насекомые погибают за 24–72 часа. Уже через несколько часов можно вернуться домой</p>
+                <p class="font-semibold text-white text-sm sm:text-base mb-0.5 sm:mb-1">Результат</p>
+                <p class="text-gray-400 text-xs sm:text-sm leading-relaxed">Насекомые погибают за 24–72 часа. Уже через несколько часов можно вернуться домой</p>
               </div>
             </div>
           </div>
@@ -911,6 +914,38 @@
         </div>
       </div>
     </div>
+
+    <!-- ── Glass safety block ── -->
+    <div class="mt-10 reveal">
+      <div style="background:rgba(255,255,255,0.06); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border:1.5px solid rgba(34,211,238,0.22); border-radius:22px; padding:clamp(18px,4vw,32px) clamp(18px,4vw,36px); box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+        <div class="flex items-start gap-3 mb-4">
+          <div style="flex-shrink:0; width:38px; height:38px; border-radius:11px; background:rgba(34,211,238,0.13); border:1px solid rgba(34,211,238,0.25); display:flex; align-items:center; justify-content:center; font-size:18px;">🛡️</div>
+          <div>
+            <h3 style="font-weight:700; font-size:clamp(0.95rem,2.5vw,1.1rem); color:#fff; line-height:1.3; margin-bottom:4px;">Беспокоитесь за детей и животных?</h3>
+            <p style="color:#94a3b8; font-size:0.85rem;">Не переживайте, потому что:</p>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px;">
+          <div style="display:flex; align-items:flex-start; gap:9px;">
+            <svg style="flex-shrink:0; margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="color:#d1d5db; font-size:0.82rem; line-height:1.5;">Все препараты сертифицированы и разрешены в жилых помещениях</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:9px;">
+            <svg style="flex-shrink:0; margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="color:#d1d5db; font-size:0.82rem; line-height:1.5;">После высыхания — полностью безопасно.<br>Это 2–4 часа</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:9px;">
+            <svg style="flex-shrink:0; margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="color:#d1d5db; font-size:0.82rem; line-height:1.5;">Дети и животные могут вернуться домой уже через несколько часов</span>
+          </div>
+          <div style="display:flex; align-items:flex-start; gap:9px;">
+            <svg style="flex-shrink:0; margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span style="color:#d1d5db; font-size:0.82rem; line-height:1.5;">Если в семье есть аллергик — скажите при звонке. Подберу препарат</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </section>
 
@@ -950,64 +985,13 @@
       <p class="mt-2 text-gray-500">Работаю со всеми видами насекомых и сорняков</p>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 reveal">
-
-      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
-        <div class="card-emoji text-3xl mb-4">🪳</div>
-        <h3 class="font-bold text-gray-900 mb-2">Тараканы</h3>
-        <p class="text-gray-500 text-sm leading-relaxed mb-4">Квартира, офис, кафе. Гелевый и аэрозольный метод. Уничтожение яиц и взрослых особей</p>
-        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 1 500 ₽</p>
-      </div>
-
-      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
-        <div class="card-emoji text-3xl mb-4">🐛</div>
-        <h3 class="font-bold text-gray-900 mb-2">Клопы</h3>
-        <p class="text-gray-500 text-sm leading-relaxed mb-4">Полная обработка квартиры. Убиваю и яйца, и взрослых</p>
-        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 2 000 ₽</p>
-      </div>
-
-      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
-        <div class="card-emoji text-3xl mb-4">🕷️</div>
-        <h3 class="font-bold text-gray-900 mb-2">Клещи</h3>
-        <p class="text-gray-500 text-sm leading-relaxed mb-4">Акарицидная обработка участка, дачи, территории. Защита на весь сезон</p>
-        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 1 500 ₽</p>
-      </div>
-
-      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
-        <div class="card-emoji text-3xl mb-4">🐜</div>
-        <h3 class="font-bold text-gray-900 mb-2">Блохи и муравьи</h3>
-        <p class="text-gray-500 text-sm leading-relaxed mb-4">Полная обработка помещения. Особое внимание плинтусам, щелям и мягкой мебели</p>
-        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 1 500 ₽</p>
-      </div>
-
-      <div class="card-glow bg-white rounded-2xl p-3 sm:p-5 border border-gray-100 shadow-sm flex flex-col">
-        <div class="card-emoji text-3xl mb-4">🌿</div>
-        <h3 class="font-bold text-gray-900 mb-2">Участки и дачи</h3>
-        <p class="text-gray-500 text-sm leading-relaxed mb-4">Обработка от комаров, клещей и насекомых на открытом воздухе. Приеду за город</p>
-        <p class="font-semibold text-sm mt-auto" style="color:#22d3ee;">от 2 000 ₽</p>
-      </div>
-
-      <!-- CTA card -->
-      <div class="card rounded-2xl p-3 sm:p-5 border border-gray-800 shadow-sm flex flex-col justify-between" style="background:linear-gradient(135deg,#0f172a,#0c2535);">
-        <div>
-          <div class="text-2xl sm:text-3xl mb-2 sm:mb-4">📞</div>
-          <h3 class="font-bold text-white text-sm sm:text-base mb-1 sm:mb-2">Не нашли свой случай?</h3>
-          <p class="text-gray-400 text-xs sm:text-sm leading-relaxed mb-3 sm:mb-5">Расскажите ситуацию — скажу, что делать и сколько стоит</p>
-        </div>
-        <a href="tel:+79658225110" class="btn-primary text-sm px-4 py-3 rounded-xl">
-          Позвонить сейчас
-        </a>
-      </div>
-    </div>
 
     <!-- Разновидности обработки -->
-    <div class="mt-10 reveal">
-      <div class="rounded-2xl overflow-hidden" style="background-image:linear-gradient(145deg,rgba(15,23,42,0.92) 0%,rgba(12,30,47,0.90) 100%),url('Hero.png'); background-size:cover; background-position:60% top; border:1px solid rgba(255,255,255,0.1);">
+    <div class="reveal">
+      <div class="rounded-2xl overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#0c2535 100%); border:1px solid rgba(255,255,255,0.07);">
 
         <div class="px-6 sm:px-8 pt-7 pb-5">
-          <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:#22d3ee;">Расширенный спектр</p>
-          <h3 class="text-xl sm:text-2xl font-bold text-white">Разновидности обработки</h3>
-          <p class="text-gray-500 text-sm mt-1">Профессиональные методы для каждой задачи</p>
+          <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:#22d3ee;">Профессиональные методы для каждой задачи</p>
         </div>
 
         <div class="px-4 sm:px-6 pb-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -1016,40 +1000,43 @@
           <div style="background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.16);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(34,211,238,0.13)'" onmouseout="this.style.background='rgba(34,211,238,0.08)'">
             <div style="width:42px;height:42px;border-radius:11px;background:rgba(34,211,238,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🧪</div>
             <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Инсектицидная</h4>
-            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Комплексная обработка от всех видов насекомых профессиональными препаратами</p>
-            <span style="color:#22d3ee;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 1 500 ₽</span>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;">Комплексная обработка от всех видов насекомых: тараканы, клопы, клещи и т.д.</p>
           </div>
 
           <!-- Акарицидная — indigo -->
           <div style="background:rgba(99,102,241,0.09);border:1px solid rgba(99,102,241,0.18);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(99,102,241,0.15)'" onmouseout="this.style.background='rgba(99,102,241,0.09)'">
             <div style="width:42px;height:42px;border-radius:11px;background:rgba(99,102,241,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🕷️</div>
             <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Акарицидная</h4>
-            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Уничтожение клещей и паукообразных на участке, в траве и кустарниках</p>
-            <span style="color:#818cf8;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 1 500 ₽</span>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;">Уничтожение клещей и паукообразных на участке, в траве и кустарниках</p>
           </div>
 
           <!-- Фумигация — amber -->
           <div style="background:rgba(217,119,6,0.09);border:1px solid rgba(217,119,6,0.18);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(217,119,6,0.15)'" onmouseout="this.style.background='rgba(217,119,6,0.09)'">
             <div style="width:42px;height:42px;border-radius:11px;background:rgba(217,119,6,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🪵</div>
             <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Фумигация от короеда</h4>
-            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Обработка деревянных конструкций, бревен и балок. Уничтожение личинок жуков-короедов</p>
-            <span style="color:#fbbf24;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 3 000 ₽</span>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;">Обработка деревянных конструкций, бревен и балок. Уничтожение личинок жуков-короедов</p>
           </div>
 
           <!-- Гербицидная — emerald -->
           <div style="background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.16);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(16,185,129,0.14)'" onmouseout="this.style.background='rgba(16,185,129,0.08)'">
             <div style="width:42px;height:42px;border-radius:11px;background:rgba(16,185,129,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🌱</div>
             <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Гербицидная</h4>
-            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Уничтожение сорняков. Дорожки, газоны, открытые территории и участки</p>
-            <span style="color:#34d399;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 2 000 ₽</span>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;">Уничтожение сорняков. Дорожки, газоны, открытые территории и участки</p>
           </div>
 
           <!-- Антисептическая — violet -->
-          <div class="sm:col-span-2 lg:col-span-2" style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.17);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(139,92,246,0.14)'" onmouseout="this.style.background='rgba(139,92,246,0.08)'">
+          <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.17);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='rgba(139,92,246,0.14)'" onmouseout="this.style.background='rgba(139,92,246,0.08)'">
             <div style="width:42px;height:42px;border-radius:11px;background:rgba(139,92,246,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">🛡️</div>
             <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Антисептическая</h4>
-            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:10px;">Защита дерева от грибка, плесени и гнили в жилых и нежилых помещениях</p>
-            <span style="color:#a78bfa;margin-top:auto;display:block;font-size:13px;font-weight:600;">от 2 000 ₽</span>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;">Уничтожение плесени в жилых и нежилых помещениях</p>
+          </div>
+
+          <!-- Не нашли свой случай — CTA -->
+          <div style="background:linear-gradient(135deg,rgba(34,211,238,0.12) 0%,rgba(8,145,178,0.08) 100%);border:1px solid rgba(34,211,238,0.25);border-radius:16px;padding:20px;display:flex;flex-direction:column;transition:background 0.25s;" onmouseover="this.style.background='linear-gradient(135deg,rgba(34,211,238,0.18) 0%,rgba(8,145,178,0.12) 100%)'" onmouseout="this.style.background='linear-gradient(135deg,rgba(34,211,238,0.12) 0%,rgba(8,145,178,0.08) 100%)'">
+            <div style="width:42px;height:42px;border-radius:11px;background:rgba(34,211,238,0.18);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;">📞</div>
+            <h4 style="color:#fff;font-weight:700;font-size:15px;margin-bottom:6px;">Не нашли свой случай?</h4>
+            <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:14px;">Расскажите ситуацию — скажу, что делать и сколько стоит</p>
+            <a href="tel:+79658225110" class="btn-primary text-sm rounded-xl mt-auto" style="padding:10px 16px;text-align:center;">Позвонить сейчас</a>
           </div>
 
         </div>
@@ -1063,10 +1050,10 @@
           <div class="text-4xl flex-shrink-0">🏠</div>
           <div class="flex-1">
             <h3 class="font-bold text-gray-900 mb-2">Скидка соседям — за компанию выгоднее</h3>
-            <p class="text-gray-500 text-sm leading-relaxed">Насекомые часто возвращаются из соседних квартир. Договоритесь вместе — каждая квартира получит скидку при одновременной обработке нескольких адресов. Размер скидки уточняйте при звонке</p>
+            <p class="text-gray-500 text-sm leading-relaxed">При одновременной обработке нескольких адресов. Размер скидки уточняйте при звонке</p>
           </div>
           <a href="tel:+79658225110" class="btn-primary text-sm px-6 py-3 rounded-xl flex-shrink-0 gap-2" style="white-space:nowrap;">
-            Узнать условия
+            Позвонить сейчас
           </a>
         </div>
       </div>
@@ -1079,13 +1066,15 @@
 <!-- ═══════════════════════════════════════
      БЛОК 5 — ГАЛЕРЕЯ РАБОТ
 ════════════════════════════════════════ -->
-<section class="py-16 sm:py-24 bg-white">
+<section class="py-16 sm:py-24 parallax-hero">
+  <div class="parallax-bg"></div>
+  <div class="parallax-inner">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
     <div class="reveal text-center mb-12">
       <p class="label mb-3">Реальные объекты</p>
-      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Фото работ</h2>
-      <p class="mt-2 text-gray-500">Квартиры, кухни, подъезды, дачные участки</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-white">Фото работ</h2>
+      <p class="mt-2 text-gray-400">Квартиры, кухни, подъезды, дачные участки</p>
     </div>
 
     <!-- Masonry-style grid -->
@@ -1097,18 +1086,18 @@
       </div>
 
       <div class="photo-wrap rounded-2xl shadow-sm row-span-1">
-        <img src="фото обработки в подъезде.jpg" alt="Обработка подъезда" loading="lazy">
-        <div class="photo-overlay"><span>Обработка подъезда</span></div>
+        <img src="фото обработки в квартире.jpeg" alt="Обработка квартиры" loading="lazy">
+        <div class="photo-overlay"><span>Обработка квартиры</span></div>
       </div>
 
       <div class="photo-wrap rounded-2xl shadow-sm col-span-2 lg:col-span-1 lg:row-span-2">
-        <img src="фото обработки на участке дачи.png" alt="Обработка дачного участка" loading="lazy">
-        <div class="photo-overlay"><span>Обработка дачного участка</span></div>
+        <img src="фото обработки на участке.jpg" alt="Обработка участка" loading="lazy">
+        <div class="photo-overlay"><span>Обработка участка</span></div>
       </div>
 
       <div class="photo-wrap rounded-2xl shadow-sm row-span-1">
-        <img src="фото обработки в квартире.jpeg" alt="Обработка квартиры" loading="lazy">
-        <div class="photo-overlay"><span>Обработка квартиры</span></div>
+        <img src="фото обработки в подъезде.jpg" alt="Обработка подъезда" loading="lazy">
+        <div class="photo-overlay"><span>Обработка подъезда</span></div>
       </div>
 
       <div class="photo-wrap rounded-2xl shadow-sm row-span-1">
@@ -1116,150 +1105,81 @@
         <div class="photo-overlay"><span>Обработка открытой территории</span></div>
       </div>
 
+
     </div>
+  </div>
   </div>
 </section>
 
 
 <!-- ═══════════════════════════════════════
-     БЛОК 6 — ПРЕИМУЩЕСТВА
+     БЛОК 6 — ПОЧЕМУ ВЫБИРАЮТ МЕНЯ
 ════════════════════════════════════════ -->
-<section class="why-section py-16 sm:py-24">
-  <div class="why-inner max-w-5xl mx-auto px-4 sm:px-6">
-
-    <div class="reveal text-center mb-10">
-      <p class="label mb-3" style="color:rgba(34,211,238,0.9);">Почему я</p>
-      <h2 class="text-2xl sm:text-3xl font-bold text-white">А не другие:</h2>
-    </div>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 reveal">
-
-      <div class="why-item">
-        <div class="why-check">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <p class="font-semibold text-white text-sm sm:text-base">Один мастер</p>
-      </div>
-
-      <div class="why-item">
-        <div class="why-check">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <p class="font-semibold text-white text-sm sm:text-base">Цена не меняется</p>
-      </div>
-
-      <div class="why-item">
-        <div class="why-check">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <p class="font-semibold text-white text-sm sm:text-base">Гарантия результата</p>
-      </div>
-
-      <div class="why-item">
-        <div class="why-check">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <p class="font-semibold text-white text-sm sm:text-base">Официальная лицензия</p>
-      </div>
-
-      <div class="why-item">
-        <div class="why-check">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <p class="font-semibold text-white text-sm sm:text-base">Выезд в день звонка</p>
-      </div>
-
-      <div class="why-item">
-        <div class="why-check">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <p class="font-semibold text-white text-sm sm:text-base">Профессиональные препараты</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════════════════════════════
-     БЛОК 7 — БЕЗОПАСНОСТЬ
-════════════════════════════════════════ -->
-<section class="py-16 sm:py-24 bg-white">
+<section class="py-16 sm:py-24 bg-gray-50">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
-    <div class="safety-outer">
-
-      <!-- Фото: десктоп — слева (40%), мобайл — скрыто, показывается внутри safety-header-row -->
-      <div class="reveal safety-img-col">
-        <div class="photo-wrap rounded-2xl shadow-xl" style="aspect-ratio:4/3; width:100%;">
-          <img src="building-Photoroom.png" alt="Профессиональная дезинсекция" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
-        </div>
-      </div>
-
-      <!-- Контент -->
-      <div class="reveal safety-content">
-
-        <!-- Мобайл: картинка слева + label + h2 справа -->
-        <div class="safety-header-row">
-          <div class="safety-img-mobile">
-            <img src="building-Photoroom.png" alt="Профессиональная дезинсекция" loading="lazy">
-          </div>
-          <div>
-            <p class="label mb-2">Безопасность</p>
-            <h2 class="text-xl font-bold text-gray-900 leading-snug">Беспокоитесь за детей и животных?</h2>
-          </div>
-        </div>
-
-        <!-- Десктоп: label + h2 (скрыто на мобайле через CSS) -->
-        <div class="safety-desktop-titles">
-          <p class="label mb-3">Безопасность</p>
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">Беспокоитесь за детей и животных?</h2>
-        </div>
-
-        <p class="text-gray-500 mb-7">Не переживайте, потому что:</p>
-
-        <div class="space-y-4">
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 mt-0.5">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <p class="text-gray-700 text-sm leading-relaxed">Все препараты сертифицированы и разрешены в жилых помещениях</p>
-          </div>
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 mt-0.5">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <p class="text-gray-700 text-sm leading-relaxed">После высыхания — полностью безопасно. Это 2–4 часа</p>
-          </div>
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 mt-0.5">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <p class="text-gray-700 text-sm leading-relaxed">Дети и животные могут вернуться домой уже через несколько часов</p>
-          </div>
-          <div class="flex gap-3">
-            <div class="flex-shrink-0 mt-0.5">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <p class="text-gray-700 text-sm leading-relaxed">Если в семье есть аллергик — скажите при звонке. Подберу препарат</p>
-          </div>
-        </div>
-      </div>
+    <div class="reveal text-center mb-12">
+      <p class="label mb-3">Мои преимущества</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Почему выбирают меня</h2>
+      <p class="mt-2 text-gray-500">А не крупные компании и дешёвые бригады</p>
     </div>
 
-    <!-- Кнопка: центрирована по всей секции -->
-    <div class="text-center mt-10">
-      <a href="tel:+79658225110" class="btn-primary text-sm px-6 py-3 rounded-xl gap-2 inline-flex items-center">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.1 7.91a16 16 0 006 6l1.09-1.09a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
-        </svg>
-        Задать вопрос по телефону
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+      <div class="why-card reveal" style="transition-delay:0s;">
+        <div class="why-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 text-lg mb-1">Один мастер</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Я сам принимаю звонок, сам приезжаю и сам делаю работу. Никаких субподрядчиков и посредников — вы всегда знаете, кто в вашем доме</p>
+        </div>
+        <div style="height:2px;background:rgba(34,211,238,0.15);border-radius:99px;margin-top:4px;"></div>
+      </div>
+
+      <div class="why-card reveal" style="transition-delay:0.1s;">
+        <div class="why-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 text-lg mb-1">Цена не меняется</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Называю стоимость по телефону — приеду и не повышу. Без «а вот тут ещё доплата» после приезда. Цена фиксируется до обработки</p>
+        </div>
+        <div style="height:2px;background:rgba(34,211,238,0.15);border-radius:99px;margin-top:4px;"></div>
+      </div>
+
+      <div class="why-card reveal" style="transition-delay:0.2s;">
+        <div class="why-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 text-lg mb-1">Гарантия результата</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Если насекомые вернутся — приеду повторно бесплатно. Работаю с гарантией, потому что уверен в препаратах и методах</p>
+        </div>
+        <div style="height:2px;background:rgba(34,211,238,0.15);border-radius:99px;margin-top:4px;"></div>
+      </div>
+
+      <div class="why-card reveal" style="transition-delay:0.3s;">
+        <div class="why-card-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h3 class="font-bold text-gray-900 text-lg mb-1">Профессиональные препараты</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Не магазинные спреи, которые насекомые давно выработали устойчивость к. Использую сертифицированные составы для профессионалов</p>
+        </div>
+        <div style="height:2px;background:rgba(34,211,238,0.15);border-radius:99px;margin-top:4px;"></div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-10 reveal">
+      <a href="#form" class="btn-primary text-base px-8 py-4 rounded-xl gap-2">
+        Вызвать мастера
       </a>
     </div>
 
   </div>
 </section>
-
 
 <!-- ═══════════════════════════════════════
      БЛОК 8 — ФИНАЛЬНЫЙ ДОЖИМ + ФОРМА
@@ -1557,6 +1477,30 @@
       }, 900);
     }
   });
+
+
+  // ── Параллакс — универсальный (iOS, Android, Desktop) ──
+  // Двигаем .parallax-bg через transform:translateY — работает везде.
+  // background-attachment:fixed на мобиле не нужен и не работает в iOS Safari.
+  (function () {
+    var bgEls = document.querySelectorAll('.parallax-bg');
+    if (!bgEls.length) return;
+
+    function updateParallax() {
+      bgEls.forEach(function (bg) {
+        var section = bg.parentElement;
+        var rect = section.getBoundingClientRect();
+        // rect.top — позиция секции относительно viewport
+        // При скролле вниз rect.top уменьшается → bg сдвигается вверх медленнее контента
+        var shift = rect.top * 0.3;
+        bg.style.transform = 'translateY(' + shift + 'px)';
+      });
+    }
+
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    window.addEventListener('resize', updateParallax, { passive: true });
+    updateParallax();
+  })();
 
   // ── Header scroll style ──
   const header = document.querySelector('header');
