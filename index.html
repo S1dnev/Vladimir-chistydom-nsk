@@ -125,7 +125,7 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', system-ui, sans-serif; }
 
-    /* Hero */
+    /* Hero — фон зафиксирован относительно viewport */
     #hero {
       background-image: url('Hero.png');
       background-size: cover;
@@ -133,16 +133,7 @@
       background-attachment: fixed;
     }
     @media (max-width: 768px) {
-      #hero {
-        background-attachment: scroll;
-        background-position: 60% center;
-      }
-    }
-    @media (max-width: 425px) {
-      #hero {
-        background-attachment: scroll;
-        background-position: 60% center;
-      }
+      #hero { background-position: 60% center; }
     }
 
     /* Кнопки — CTA pulse */
@@ -521,24 +512,16 @@
     }
 
     /* ── Parallax sections (section3 + gallery) ── */
-    /* ── Parallax: фон — отдельный div, двигается через transform ── */
+    /* Фон зафиксирован на самой секции — точно так же, как в #hero */
     .parallax-hero {
       position: relative;
-      overflow: hidden;   /* обрезаем вылезающий parallax-bg */
-    }
-    /* Фоновый слой — уходит за пределы секции (extra 30%) */
-    .parallax-bg {
-      position: absolute;
-      top: -30%;
-      bottom: -30%;
-      left: 0;
-      right: 0;
+      overflow: hidden;
       background-image: url('Hero.png');
       background-size: cover;
       background-position: 60% center;
-      z-index: 0;
-      will-change: transform;
+      background-attachment: fixed;
     }
+    .parallax-bg { display: none; }
     /* Тёмный оверлей поверх фона */
     .parallax-hero::before {
       content: '';
@@ -937,10 +920,6 @@
           <div style="display:flex; align-items:flex-start; gap:9px;">
             <svg style="flex-shrink:0; margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             <span style="color:#d1d5db; font-size:0.82rem; line-height:1.5;">Дети и животные могут вернуться домой уже через несколько часов</span>
-          </div>
-          <div style="display:flex; align-items:flex-start; gap:9px;">
-            <svg style="flex-shrink:0; margin-top:2px;" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span style="color:#d1d5db; font-size:0.82rem; line-height:1.5;">Если в семье есть аллергик — скажите при звонке. Подберу препарат</span>
           </div>
         </div>
       </div>
@@ -1478,29 +1457,6 @@
     }
   });
 
-
-  // ── Параллакс — универсальный (iOS, Android, Desktop) ──
-  // Двигаем .parallax-bg через transform:translateY — работает везде.
-  // background-attachment:fixed на мобиле не нужен и не работает в iOS Safari.
-  (function () {
-    var bgEls = document.querySelectorAll('.parallax-bg');
-    if (!bgEls.length) return;
-
-    function updateParallax() {
-      bgEls.forEach(function (bg) {
-        var section = bg.parentElement;
-        var rect = section.getBoundingClientRect();
-        // rect.top — позиция секции относительно viewport
-        // При скролле вниз rect.top уменьшается → bg сдвигается вверх медленнее контента
-        var shift = rect.top * 0.3;
-        bg.style.transform = 'translateY(' + shift + 'px)';
-      });
-    }
-
-    window.addEventListener('scroll', updateParallax, { passive: true });
-    window.addEventListener('resize', updateParallax, { passive: true });
-    updateParallax();
-  })();
 
   // ── Header scroll style ──
   const header = document.querySelector('header');
