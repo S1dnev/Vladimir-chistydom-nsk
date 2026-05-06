@@ -137,12 +137,55 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', system-ui, sans-serif; }
 
-    /* Hero — Ken Burns на фото, без частиц */
+    /* ── Particle system: каждая частица — свой путь и физика, GPU-only ── */
+    .fx-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .fx-particles span {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size, 3px);
+      height: var(--size, 3px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(103,232,249,0.95) 0%, rgba(103,232,249,0.35) 45%, transparent 75%);
+      opacity: 0;
+      animation: fx-float var(--d, 8s) ease-in-out var(--delay, 0s) infinite;
+      will-change: transform, opacity;
+    }
+    /* Closed loop — частица всегда видна, дрейфует в орбите и возвращается в начало.
+       Никаких видимых «прыжков» при reset, ощущение постоянно летающей пыли. */
+    @keyframes fx-float {
+      0%, 100% {
+        transform: translate3d(0, 0, 0) scale(0.9);
+        opacity: var(--peak, 0.75);
+      }
+      25% {
+        transform: translate3d(calc(var(--dx, 30px) * 0.35), calc(var(--dy, -40px) * 0.45), 0) scale(1);
+      }
+      50% {
+        transform: translate3d(calc(var(--dx, 30px) * 0.85 + 6px), calc(var(--dy, -40px) * 0.7 - 4px), 0) scale(0.92);
+      }
+      75% {
+        transform: translate3d(calc(var(--dx, 30px) * 0.5 - 8px), calc(var(--dy, -40px) * 0.3 + 5px), 0) scale(1);
+      }
+    }
+    .fx-particles.is-paused span { animation-play-state: paused; }
+    @media (prefers-reduced-motion: reduce) {
+      .fx-particles { display: none; }
+    }
+
+    /* Hero — Ken Burns на фото + слой частиц */
     #hero {
       position: relative;
       overflow: hidden;
       background-color: #0f172a;
     }
+    #hero .fx-particles { z-index: 5; }
     #hero::before {
       content: '';
       position: absolute;
@@ -446,8 +489,15 @@
 
     /* Guarantee block */
     .guarantee-bg {
+      position: relative;
+      overflow: hidden;
       background: linear-gradient(135deg, #0f172a 0%, #0c2535 100%);
     }
+    .guarantee-bg > *:not(.fx-particles) { position: relative; z-index: 2; }
+
+    /* Карточка «Профессиональные методы» — обёртка для fx-particles */
+    .methods-card { position: relative; }
+    .methods-card > *:not(.fx-particles) { position: relative; z-index: 2; }
 
     /* ── Анимация: картинки Photoroom ползут справа налево ── */
     @keyframes img-crawl-in {
@@ -547,8 +597,8 @@
         radial-gradient(ellipse 120% 80% at 50% 100%, rgba(34,211,238,0.10), transparent 60%),
         linear-gradient(180deg, #060d1a 0%, #040912 100%);
     }
-    /* Старый фон-div больше не используется */
-    .parallax-bg { display: none; }
+    /* parallax-bg = контейнер для fx-particles внутри parallax-секций */
+    .parallax-bg.fx-particles { z-index: 0; }
     /* Cyan-блики (статика, дёшево для GPU) */
     .parallax-hero::after {
       content: '';
@@ -705,6 +755,7 @@
 ════════════════════════════════════════ -->
 <section id="hero" class="relative min-h-screen flex items-center">
   <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(15,23,42,0.88) 0%,rgba(15,23,42,0.65) 100%);"></div>
+  <div class="fx-particles" data-count="24"></div>
   <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 w-full" style="padding-top:clamp(5.5rem,14vw,7rem); padding-bottom:clamp(6rem,18vw,8rem);">
     <div class="max-w-xl">
 
@@ -853,7 +904,7 @@
      БЛОК 3 — КАК ПРОХОДИТ ОБРАБОТКА
 ════════════════════════════════════════ -->
 <section id="section3" class="py-12 sm:py-24 parallax-hero">
-  <div class="parallax-bg"></div>
+  <div class="parallax-bg fx-particles" data-count="20"></div>
   <div class="parallax-inner">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
@@ -1009,7 +1060,8 @@
 
     <!-- Разновидности обработки -->
     <div class="reveal">
-      <div class="rounded-2xl overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#0c2535 100%); border:1px solid rgba(255,255,255,0.07);">
+      <div class="methods-card rounded-2xl overflow-hidden" style="background:linear-gradient(135deg,#0f172a 0%,#0c2535 100%); border:1px solid rgba(255,255,255,0.07);">
+        <div class="fx-particles" data-count="9"></div>
 
         <div class="px-6 sm:px-8 pt-7 pb-5">
           <p class="text-xs font-bold tracking-widest uppercase mb-2" style="color:#22d3ee;">Профессиональные методы для каждой задачи</p>
@@ -1088,7 +1140,7 @@
      БЛОК 5 — ГАЛЕРЕЯ РАБОТ
 ════════════════════════════════════════ -->
 <section class="py-16 sm:py-24 parallax-hero">
-  <div class="parallax-bg"></div>
+  <div class="parallax-bg fx-particles" data-count="20"></div>
   <div class="parallax-inner">
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
 
@@ -1206,6 +1258,7 @@
      БЛОК 8 — ФИНАЛЬНЫЙ ДОЖИМ + ФОРМА
 ════════════════════════════════════════ -->
 <section id="form" class="py-16 sm:py-24 guarantee-bg">
+  <div class="fx-particles" data-count="16"></div>
   <div class="max-w-5xl mx-auto px-4 sm:px-6">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
 
@@ -1499,6 +1552,66 @@
     }
   });
 
+
+  // ── Particle system: генерация + пауза offscreen ──
+  // Каждая частица — span с уникальными CSS-vars (своя траектория, скорость, размер, fade).
+  // Animation работает только на transform/opacity → GPU-композит, без paint per frame.
+  // IntersectionObserver приостанавливает невидимые секции — 0% CPU когда не в viewport.
+  (function () {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var hosts = document.querySelectorAll('.fx-particles');
+    if (!hosts.length) return;
+    var isMobile = window.innerWidth < 768;
+    hosts.forEach(function (host) {
+      var base = parseInt(host.dataset.count || '12', 10);
+      var count = isMobile ? Math.max(5, Math.round(base * 0.6)) : base;
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < count; i++) {
+        var p = document.createElement('span');
+        var dx = ((Math.random() - 0.5) * 110).toFixed(1);     // -55..+55px горизонталь (любая сторона)
+        var dy = (-Math.random() * 90 - 20).toFixed(1);        // -20..-110px вверх (всегда вверх)
+        var d = (5 + Math.random() * 7).toFixed(2);            // 5-12s цикл
+        var delay = (-Math.random() * d).toFixed(2);           // -d..0s — старт уже в полёте
+        var peak = (0.55 + Math.random() * 0.4).toFixed(2);    // 0.55-0.95 пик яркости
+        var size = (2 + Math.random() * 3).toFixed(1);         // 2-5px
+        p.style.cssText =
+          '--x:' + (Math.random() * 100).toFixed(2) + '%;' +
+          '--y:' + (Math.random() * 100).toFixed(2) + '%;' +
+          '--dx:' + dx + 'px;' +
+          '--dy:' + dy + 'px;' +
+          '--d:' + d + 's;' +
+          '--delay:' + delay + 's;' +
+          '--peak:' + peak + ';' +
+          '--size:' + size + 'px;';
+        frag.appendChild(p);
+      }
+      host.appendChild(frag);
+    });
+    // Пауза для секций вне viewport — экономия батареи на мобиле
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          e.target.classList.toggle('is-paused', !e.isIntersecting);
+        });
+      }, { rootMargin: '60px' });
+      hosts.forEach(function (h) { io.observe(h); });
+    }
+    // Пауза, когда вкладка не активна
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        hosts.forEach(function (h) { h.classList.add('is-paused'); });
+      } else if ('IntersectionObserver' in window) {
+        // Возвращаем как было — IO снова решит
+        hosts.forEach(function (h) {
+          var rect = h.getBoundingClientRect();
+          var visible = rect.bottom > 0 && rect.top < window.innerHeight;
+          h.classList.toggle('is-paused', !visible);
+        });
+      } else {
+        hosts.forEach(function (h) { h.classList.remove('is-paused'); });
+      }
+    });
+  })();
 
   // ── Header scroll style ──
   const header = document.querySelector('header');
