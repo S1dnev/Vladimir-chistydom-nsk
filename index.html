@@ -1307,7 +1307,7 @@
           <h3 class="text-xl font-bold text-gray-900 mb-1">Оставьте заявку</h3>
           <p class="text-gray-500 text-sm mb-6">Я вам перезвоню</p>
 
-          <form id="leadForm" action="thanks.html" method="GET" novalidate>
+          <form id="leadForm" novalidate>
             <div class="space-y-4">
 
               <div>
@@ -1345,6 +1345,24 @@
                 style="opacity:0.45;cursor:not-allowed;">
                 Отправить
               </button>
+
+              <!-- Статус отправки: показывается только при ошибке/ожидании -->
+              <div id="formStatus" class="hidden" style="margin-top:14px;border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.5;">
+                <p id="formStatusText" style="margin:0;"></p>
+                <div id="formStatusFallback" class="hidden" style="margin-top:10px;display:flex;flex-wrap:wrap;gap:8px;">
+                  <a href="https://t.me/Evil_SVV" target="_blank" rel="noopener"
+                     style="display:inline-flex;align-items:center;gap:6px;background:#229ED9;color:#fff;padding:8px 14px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;">
+                    Написать в Telegram
+                  </a>
+                  <a href="tel:+79658225110"
+                     style="display:inline-flex;align-items:center;gap:6px;background:#0e7490;color:#fff;padding:8px 14px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;">
+                    Позвонить
+                  </a>
+                  <a href="/cdn-cgi/l/email-protection#2d4c445e1e1d1d1d6d544c43494855035f58" style="display:inline-flex;align-items:center;gap:6px;background:#374151;color:#fff;padding:8px 14px;border-radius:8px;font-weight:600;font-size:13px;text-decoration:none;">
+                    Написать на почту
+                  </a>
+                </div>
+              </div>
 
             </div>
           </form>
@@ -1411,7 +1429,7 @@
 </div>
 
 <!-- ─── SCRIPTS ─── -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // ── Preloader — минимум 2 секунды ──
   var _plStart = Date.now();
   function hidePreloader() {
@@ -1506,51 +1524,144 @@
     }
 
     if (valid) {
-      submitBtn.textContent = 'Отправляем...';
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.7';
-
-      var nameVal  = document.getElementById('f-name').value.trim();
-      var phoneVal = document.getElementById('f-phone').value.trim();
-
-      // ── НАСТРОЙКИ — вставьте свои значения ──────────────────────────
-      var TG_TOKEN   = '8686915338:AAE1dJ-UdgfM8IvyCby13n-fgZIeqlisiss';
-      var TG_CHAT_ID = '532088676';
-      var W3F_KEY    = 'e513e7f0-6846-4599-a31f-7766b5be9773';
-      // ────────────────────────────────────────────────────────────────
-
-      var tgText = encodeURIComponent(
-        '🔔 Новая заявка — Чистый Дом\n\n' +
-        '👤 Имя: ' + nameVal + '\n' +
-        '📞 Телефон: ' + phoneVal
+      submitFormReliably(
+        document.getElementById('f-name').value.trim(),
+        document.getElementById('f-phone').value.trim()
       );
+    }
+  });
 
-      // 1. Отправка в Telegram
-      var tgUrl = 'https://api.telegram.org/bot' + TG_TOKEN +
-        '/sendMessage?chat_id=' + TG_CHAT_ID +
-        '&text=' + tgText + '&parse_mode=HTML';
+  // ── Надёжная отправка формы (без Telegram API — он блокируется в РФ) ──
+  // Стратегия: пробуем Web3Forms, при ошибке — резервный Formsubmit.
+  // Редирект на thanks.html ТОЛЬКО при подтверждённом успехе.
+  function submitFormReliably(nameVal, phoneVal) {
+    var submitBtn   = document.getElementById('submitBtn');
+    var statusBox   = document.getElementById('formStatus');
+    var statusText  = document.getElementById('formStatusText');
+    var statusFb    = document.getElementById('formStatusFallback');
 
-      fetch(tgUrl).catch(function() {});
+    // Ключ Web3Forms (получает на email заказчика)
+    var W3F_KEY = 'e513e7f0-6846-4599-a31f-7766b5be9773';
+    // Резервный канал — Formsubmit (на тот же email)
+    var FS_EMAIL = 'ais3000@yandex.ru';
 
-      // 2. Отправка на email через Web3Forms
-      fetch('https://api.web3forms.com/submit', {
+    function setStatus(kind, msg, showFallback) {
+      statusBox.classList.remove('hidden');
+      statusText.textContent = msg;
+      if (kind === 'wait') {
+        statusBox.style.background = '#ecfeff';
+        statusBox.style.color      = '#155e75';
+        statusBox.style.border     = '1px solid #a5f3fc';
+      } else if (kind === 'error') {
+        statusBox.style.background = '#fef2f2';
+        statusBox.style.color      = '#991b1b';
+        statusBox.style.border     = '1px solid #fecaca';
+      }
+      if (showFallback) statusFb.classList.remove('hidden');
+      else              statusFb.classList.add('hidden');
+    }
+
+    function lockBtn(text) {
+      submitBtn.textContent  = text;
+      submitBtn.disabled     = true;
+      submitBtn.style.opacity= '0.7';
+      submitBtn.style.cursor = 'wait';
+    }
+    function unlockBtn() {
+      submitBtn.textContent  = 'Отправить';
+      submitBtn.disabled     = false;
+      submitBtn.style.opacity= '1';
+      submitBtn.style.cursor = 'pointer';
+    }
+
+    // fetch с таймаутом — чтобы не висеть вечно при блокировке/плохой сети
+    function fetchWithTimeout(url, opts, ms) {
+      opts = opts || {};
+      if ('AbortController' in window) {
+        var ctrl = new AbortController();
+        opts.signal = ctrl.signal;
+        var t = setTimeout(function() { ctrl.abort(); }, ms);
+        return fetch(url, opts).finally(function() { clearTimeout(t); });
+      }
+      // Фолбэк для старых браузеров — без abort
+      return Promise.race([
+        fetch(url, opts),
+        new Promise(function(_, rej) {
+          setTimeout(function() { rej(new Error('timeout')); }, ms);
+        })
+      ]);
+    }
+
+    // Канал 1 — Web3Forms
+    function sendViaWeb3Forms() {
+      return fetchWithTimeout('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
           access_key: W3F_KEY,
           subject: 'Новая заявка — Чистый Дом',
+          from_name: 'Сайт «Чистый Дом»',
           name: nameVal,
           phone: phoneVal,
           message: 'Имя: ' + nameVal + '\nТелефон: ' + phoneVal
         })
-      }).catch(function() {});
-
-      // 3. Редирект на страницу благодарности
-      setTimeout(function() {
-        window.location.href = 'thanks.html';
-      }, 900);
+      }, 12000).then(function(r) {
+        if (!r.ok) throw new Error('w3f http ' + r.status);
+        return r.json();
+      }).then(function(data) {
+        if (!data || data.success !== true) throw new Error('w3f bad response');
+        return true;
+      });
     }
-  });
+
+    // Канал 2 — Formsubmit (резерв, отдаёт CORS и принимает JSON через ajax-эндпоинт)
+    function sendViaFormsubmit() {
+      var url = 'https://formsubmit.co/ajax/' + encodeURIComponent(FS_EMAIL);
+      return fetchWithTimeout(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: 'Новая заявка — Чистый Дом',
+          _template: 'table',
+          _captcha: 'false',
+          name: nameVal,
+          phone: phoneVal
+        })
+      }, 12000).then(function(r) {
+        if (!r.ok) throw new Error('fs http ' + r.status);
+        return r.json();
+      }).then(function(data) {
+        // Formsubmit отдаёт { success: "true", message: ... }
+        if (!data || String(data.success) !== 'true') throw new Error('fs bad response');
+        return true;
+      });
+    }
+
+    // Старт
+    lockBtn('Отправляем...');
+    setStatus('wait', 'Отправляем заявку, подождите…', false);
+
+    sendViaWeb3Forms()
+      .then(function() {
+        window.location.href = 'thanks.html';
+      })
+      .catch(function(err1) {
+        // Первый канал не сработал — пробуем резервный
+        setStatus('wait', 'Подождите, повторяем отправку…', false);
+        return sendViaFormsubmit().then(function() {
+          window.location.href = 'thanks.html';
+        });
+      })
+      .catch(function(err2) {
+        // Оба канала упали — НЕ редиректим, показываем ошибку и контакты
+        unlockBtn();
+        setStatus(
+          'error',
+          'Что-то пошло не так — заявка не отправилась. Пожалуйста, напишите напрямую в Telegram, на почту или позвоните — мы быстро ответим.',
+          true
+        );
+      });
+  }
 
 
   // ── Particle system: генерация + пауза offscreen ──
